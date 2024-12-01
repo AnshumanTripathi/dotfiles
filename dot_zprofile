@@ -1,0 +1,14 @@
+eval "$(/opt/homebrew/bin/brew shellenv)"
+
+
+# Added by Toolbox App
+export PATH="$PATH:/usr/local/bin"
+
+# Load virtualenv
+export PYENV_ROOT="$HOME/.pyenv"
+export PATH="$PYENV_ROOT/bin:$PATH"
+eval "$(pyenv init --path)"
+
+# VSCode aliases
+alias leetcode="code --profile leetcode ."
+
