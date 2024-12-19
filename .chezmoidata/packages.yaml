@@ -1,3 +1,19 @@
 packages:
   brews:
+    # kubernetes
     - helm
+    - kubectl
+    - k9s
+    - kubecm
+    # shell processing
+    - bash # Updated shell
+    - jq
+    - yq
+    - bat
+    - eza
+    # utilities
+    - gopass
+    - z
+    - fzf
+    - fd
+    
