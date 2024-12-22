@@ -88,6 +88,10 @@ Plug 'dense-analysis/ale'
 
 Plug 'tomasr/molokai'
 
+" FZF autocomplete
+Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
+Plug 'junegunn/fzf.vim'
+
 call plug#end()
 
 "}}}
