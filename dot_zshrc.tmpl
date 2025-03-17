@@ -72,21 +72,24 @@ ZSH_THEME="powerlevel10k/powerlevel10k"
 # Would you like to use another custom folder than $ZSH/custom?
 # ZSH_CUSTOM=/path/to/new-custom-folder
 
+# Plugins <<<
 # Which plugins would you like to load?
 # Standard plugins can be found in $ZSH/plugins/
 # Custom plugins may be added to $ZSH_CUSTOM/plugins/
 # Example format: plugins=(rails git textmate ruby lighthouse)
 # Add wisely, as too many plugins slow down shell startup.
 plugins=(
-        # Shell Plugins
-        git   
-        zsh-autosuggestions
-        zsh-syntax-highlighting
-        # Tools
-        gcloud
-        kubectl
-      )
+		git
+		zsh-syntax-highlighting
+		zsh-autosuggestions
+    kubectl
+    helm
+    gcloud
+    jsontools
+)
 
+source $ZSH/oh-my-zsh.sh
+# >>>
 source $ZSH/oh-my-zsh.sh
 
 # User configuration
@@ -111,30 +114,32 @@ source $ZSH/oh-my-zsh.sh
 # users are encouraged to define aliases within the ZSH_CUSTOM folder.
 # For a full list of active aliases, run `alias`.
 
-PATH="/opt/homebrew/bin:$PATH"
+# Path config <<<
+PATH=$PATH:/opt/homebrew/bin
+PATH=$PATH:/opt/homebrew/Cellar/bash/5.2.37/bin/
+export PATH="/opt/homebrew/sbin:$PATH"
 
+# >>
+
+# Aliases <<<
+alias lez='eza -F --icons -l -L2 --tree'
 alias ll='ls -larth'
-alias lez='eza --tree -a -L 2'
+# >>>
+
+# Shell Config <<<
+autoload -U +X bashcompinit && bashcompinit
+complete -o nospace -C /opt/homebrew/bin/terragrunt terragrunt
+autoload -U compinit; compinit
+
+# zsh-autosuggestion config
+zle_bracketed_paste=()
+ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE='fg=#3a3a3a'
 
 # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
 [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
 
 export FZF_DEFAULT_COMMAND='fd --type file --follow --hidden --exclude .git'
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
-
-# The next line updates PATH for the Google Cloud SDK.
-if [ -f '/Users/anshumantripathi/Downloads/google-cloud-sdk 2/path.zsh.inc' ]; then . '/Users/anshumantripathi/Downloads/google-cloud-sdk 2/path.zsh.inc'; fi
-
-# The next line enables shell command completion for gcloud.
-if [ -f '/Users/anshumantripathi/Downloads/google-cloud-sdk 2/completion.zsh.inc' ]; then . '/Users/anshumantripathi/Downloads/google-cloud-sdk 2/completion.zsh.inc'; fi
-
-# zsh-autosuggestion config
-zle_bracketed_paste=()
-ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE='fg=#3a3a3a'
-
-# pyenv
-eval "$(pyenv init -)"
-eval "$(pyenv virtualenv-init -)"
 
 # syntax highlighting
 source /opt/homebrew/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
@@ -144,24 +149,72 @@ source /opt/homebrew/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
 
 EDITOR=vim
 
-#### END SHELL Config #####
+{{- if eq .profile "work" }}
 
-###### START HELPER FUNCTIONS ######
+[[ -f ~/.zsh/private.zsh ]] && source ~/.zsh/private.zsh
 
-clean_branches() {
-    git branch | grep -v "$(git_main_branch)" | xargs git branch -D
+{{- end }}
+
+# >>> 
+
+# gcloud <<<
+export CLOUDSDK_PYTHON='/Users/anshumantripathi/.pyenv/versions/gcloud/bin/python'
+
+{{- if eq .profile "work" }}
+# The next line updates PATH for the Google Cloud SDK.
+if [ -f '/Users/anshumantripathi/gcloud/path.zsh.inc' ]; then . '/Users/anshumantripathi/gcloud/path.zsh.inc'; fi
+
+# The next line enables shell command completion for gcloud.
+if [ -f '/Users/anshumantripathi/gcloud/completion.zsh.inc' ]; then . '/Users/anshumantripathi/gcloud/completion.zsh.inc'; fi
+{{- end }}
+
+# The next line updates PATH for the Google Cloud SDK.
+if [ -f '/Users/anshumantripathi/Downloads/google-cloud-sdk 2/path.zsh.inc' ]; then . '/Users/anshumantripathi/Downloads/google-cloud-sdk 2/path.zsh.inc'; fi
+
+# The next line enables shell command completion for gcloud.
+if [ -f '/Users/anshumantripathi/Downloads/google-cloud-sdk 2/completion.zsh.inc' ]; then . '/Users/anshumantripathi/Downloads/google-cloud-sdk 2/completion.zsh.inc'; fi
+
+# >>>
+
+# Pyenv <<<
+
+export PYENV_ROOT="$HOME/.pyenv"
+[[ -d $PYENV_ROOT/bin ]] && export PATH="$PYENV_ROOT/bin:$PATH"
+eval "$(pyenv init -)"
+eval "$(pyenv virtualenv-init -)"
+
+# >>>
+
+# Utility Functions <<<
+
+function clean_branches {
+    git branch | grep -v "master\|main\|production" | xargs git branch -D
     git remote prune origin
 }
 
-###### GO Configs #######
+function g_new_branch {
+    git stash
+    gcm
+    git pull
+    if [[ $2 -eq "-f" ]]; then
+        clear_branches
+    fi
+    git checkout -b $1
+    git stash pop
+}
+
+# >>>
+
+# GO Configs <<<
 
 GOBIN=$HOME/go/bin
 export PATH=$PATH:$GOBIN
-
 export PATH=$PATH:$HOME/protobuf
 
-##### Nix #####
+# >>>
 
+{{- if eq .profile "personal" }}
+# Nix <<<
 export PATH=$PATH:$HOME/nix/nix.conf
 
 if [ -e '/nix/var/nix/profiles/default/etc/profile.d/nix-daemon.sh' ]; then
@@ -178,3 +231,6 @@ source $HOME/.nix-profile/etc/profile.d/hm-session-vars.sh
 fpath=(/opt/vagrant/embedded/gems/gems/vagrant-2.4.3/contrib/zsh $fpath)
 compinit
 # <<<<  Vagrant command completion (end)
+
+# >>>
+{{- end }}

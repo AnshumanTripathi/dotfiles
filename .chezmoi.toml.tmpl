@@ -1,8 +1,14 @@
 {{- $email := promptStringOnce . "email" "Email address" -}}
+{{- $choices := list "personal" "work" -}}
+{{- $profile := promptChoice "Profile to use" $choices -}}
 encryption = "gpg"
 [gpg]
     args = ["--quiet"]
     recipient = "32EAC9CCB3CA960E03893BA4647FB5AF905AA26D"
 [data]
     email = {{ $email | quote  }}
+    profile = {{ $profile | quote  }}
+[edit]
+    command = "code"
+    args = ["--wait"]
 

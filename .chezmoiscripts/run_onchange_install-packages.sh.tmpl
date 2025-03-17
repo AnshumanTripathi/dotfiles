@@ -2,7 +2,7 @@
 
 # packages.yaml hash: {{ .packages | toString | sha256sum }}
 
-brew bundle --no-lock --file=/dev/stdin <<EOF
+brew bundle --file=/dev/stdin <<EOF
 {{ range .packages.brews -}}
 brew {{ . | quote }}
 {{ end -}}
