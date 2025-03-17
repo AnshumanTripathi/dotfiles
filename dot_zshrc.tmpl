@@ -114,6 +114,7 @@ source $ZSH/oh-my-zsh.sh
 PATH="/opt/homebrew/bin:$PATH"
 
 alias ll='ls -larth'
+alias lez='eza --tree -a -L 2'
 
 # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
 [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
@@ -172,3 +173,8 @@ export PATH=$PATH:/run/current-system/sw/bin
 # Home Manager
 
 source $HOME/.nix-profile/etc/profile.d/hm-session-vars.sh
+
+# >>>> Vagrant command completion (start)
+fpath=(/opt/vagrant/embedded/gems/gems/vagrant-2.4.3/contrib/zsh $fpath)
+compinit
+# <<<<  Vagrant command completion (end)
