@@ -138,6 +138,8 @@ ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE='fg=#3a3a3a'
 # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
 [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
 
+# Set up fzf key bindings and fuzzy completion
+source <(fzf --zsh)
 export FZF_DEFAULT_COMMAND='fd --type file --follow --hidden --exclude .git'
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
 
@@ -201,6 +203,27 @@ function g_new_branch {
     fi
     git checkout -b $1
     git stash pop
+}
+
+function rename_kube_context() {
+  if [[ -z "$1" ]]; then
+    echo "Error: Please provide a new name for the context"
+    echo "Usage: rename_kube_context <new_name>"
+    return 1
+  fi
+  
+  local current_context=$(kubectl config current-context)
+  if [[ $? -ne 0 ]]; then
+    echo "Error: Failed to get current kubectl context"
+    return 1
+  fi
+  
+  echo "Renaming context '$current_context' to '$1'..."
+  kubecm rename "$current_context" "$1" -s
+  
+  if [[ $? -eq 0 ]]; then
+    echo "Context successfully renamed to '$1'"
+  fi
 }
 
 # >>>
