@@ -5,6 +5,7 @@ packages:
     - kubectl
     - k9s
     - kubecm
+    - kubie
     # shell processing
     - bash # Updated shell
     - jq
