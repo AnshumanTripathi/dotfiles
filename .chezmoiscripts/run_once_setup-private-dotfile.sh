@@ -8,3 +8,10 @@ if [ ! -f "$private_zsh" ]; then
     echo "# Private ZSH functions and aliases" > "$private_zsh"
     echo "Created $private_zsh"
 fi
+
+npm_gloal="$HOME/.npm-global"
+
+if [ ! -d $npm_gloal ]; then
+    mkdir -p $npm_global
+    echo "Created $npm_global directory"
+fi
