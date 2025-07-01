@@ -13,6 +13,7 @@ packages:
     - bat
     - eza
     # utilities
+    - wget
     - gopass
     - z
     - fzf

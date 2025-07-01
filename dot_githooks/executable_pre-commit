@@ -1,0 +1,50 @@
+#!/bin/bash
+
+# Git pre-commit hook to prevent direct commits to master/main branch
+# Place this file in .git/hooks/pre-commit and make it executable
+
+# ANSI color codes for output
+RED='\033[0;31m'
+YELLOW='\033[1;33m'
+GREEN='\033[0;32m'
+NC='\033[0m' # No Color
+
+# Get current branch name
+current_branch=$(git branch --show-current)
+
+# Protected branches (add more if needed)
+PROTECTED_BRANCHES=("master" "main")
+
+# Check if current branch is protected
+for protected_branch in "${PROTECTED_BRANCHES[@]}"; do
+    if [ "$current_branch" = "$protected_branch" ]; then
+        echo -e "${RED}===============================================${NC}"
+        echo -e "${RED}❌ COMMIT REJECTED!${NC}"
+        echo -e "${RED}===============================================${NC}"
+        echo -e "${RED}You are trying to commit directly to the '${current_branch}' branch.${NC}"
+        echo -e "${RED}Direct commits to '${current_branch}' are not allowed.${NC}"
+        echo ""
+        echo -e "${YELLOW}Please follow these steps instead:${NC}"
+        echo -e "${YELLOW}1. Create and switch to a feature branch:${NC}"
+        echo -e "   git checkout -b feature/your-feature-name"
+        echo ""
+        echo -e "${YELLOW}2. Make your commit on the feature branch:${NC}"
+        echo -e "   git add ."
+        echo -e "   git commit -m \"Your commit message\""
+        echo ""
+        echo -e "${YELLOW}3. Push your feature branch:${NC}"
+        echo -e "   git push origin feature/your-feature-name"
+        echo ""
+        echo -e "${YELLOW}4. Create a Pull Request to merge into '${current_branch}'${NC}"
+        echo ""
+        echo -e "${YELLOW}💡 Tip: You can bypass this hook with 'git commit --no-verify' if absolutely necessary${NC}"
+        echo -e "${RED}===============================================${NC}"
+        
+        # Exit with error code to prevent the commit
+        exit 1
+    fi
+done
+
+# If we get here, the commit is allowed
+echo -e "${GREEN}✅ Commit allowed - not on protected branch (current: ${current_branch})${NC}"
+exit 0
