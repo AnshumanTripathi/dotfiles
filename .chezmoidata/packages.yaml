@@ -1,25 +1,34 @@
 packages:
-  brews:
-    # kubernetes
-    - helm
-    - kubectl
-    - k9s
-    - kubecm
-    - kubie
-    # shell processing
-    - bash # Updated shell
-    - jq
-    - yq
-    - bat
-    - eza
-    # utilities
-    - wget
-    - gopass
-    - z
-    - fzf
-    - fd
-  wgets:
-    - name: hugo
-      url: https://github.com/gohugoio/hugo/releases/download/v0.133.0/hugo_0.133.0_darwin-universal.tar.gz
-      tar: true
+  shared:
+    brews:
+      # kubernetes
+      - helm
+      - kubectl
+      - k9s
+      - kubecm
+      - kubie
+      # shell processing
+      - bash # Updated shell
+      - jq
+      - yq
+      - bat
+      - eza
+      # utilities
+      - wget
+      - gopass
+      - z
+      - fzf
+      - fd
+    wgets: []
+    npm: []
+  profiles:
+    personal:
+      wgets:
+        - name: hugo
+          url: https://github.com/gohugoio/hugo/releases/download/v0.133.0/hugo_0.133.0_darwin-universal.tar.gz
+          tar: true
+      npm:
+        - "@anthropic-ai/claude-code"
+    work:
+      npm: []
     
