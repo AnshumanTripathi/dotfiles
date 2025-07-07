@@ -34,7 +34,7 @@ TEMP_DIR=$(mktemp -d)
 
 echo "#############################################"
 echo ""
-echo "Installing shared packages using npm"
+echo "Installing profile-specific ({{ .profile }}) packages using brew"
 echo ""
 
 {{ range .packages.shared.npm -}}
@@ -46,13 +46,27 @@ echo ""
   fi
 {{ end -}}
 
+
+{{ if .packages.profiles -}}
+{{ $profile := .profile -}}
+
+echo "Installing brew packages"
+
+echo "#############################################"
+echo ""
+echo "Installing profile-specific ({{ .profile }}) packages using brew"
+echo ""
+
+brew bundle --file=/dev/stdin <<EOF
+{{ range (index .packages.profiles $profile).brew -}}
+brew {{ . | quote }}
+{{ end -}}
+EOF
+
 echo "#############################################"
 echo ""
 echo "Installing profile-specific ({{ .profile }}) packages using npm"
 echo ""
-
-{{ if .packages.profiles -}}
-{{ $profile := .profile -}}
 {{ range (index .packages.profiles $profile).npm -}}
   if ! npm list -g {{ . }} &> /dev/null; then
     echo "Installing {{ . }} for {{ $profile }} profile"
@@ -60,6 +74,22 @@ echo ""
   else
     echo "{{ . }} already installed"
   fi
-{{ end -}}
-{{ end -}}
+{{ end -}}{{/* range (index .packages.profiles $profile).npm */}}
+
+echo "#############################################"
+echo ""
+echo "Installing profile specific ({{ .profile }}) packages using wget"
+echo ""
+
+{{ range (index .packages.profiles $profile).wgets -}}
+TEMP_DIR=$(mktemp -d)
+  {{ if  .tar -}}
+    echo "Fetching tar {{ .name }}"
+    wget {{ .url }} -O - | tar -xz -C "$TEMP_DIR"
+    mv $TEMP_DIR/{{ .name }} /usr/local/bin
+  {{ end -}}
+  rm -rf $TEMP_DIR
+{{ end -}} {{/* range (index .packages.profiles $profile).wgets */}}
+
+{{ end -}}{{/* if .packages.profiles */}}
 

@@ -23,9 +23,11 @@ packages:
     npm: []
   profiles:
     personal:
+      brew:
+        - operator-sdk
       wgets:
         - name: hugo
-          url: https://github.com/gohugoio/hugo/releases/download/v0.133.0/hugo_0.133.0_darwin-universal.tar.gz
+          url: https://github.com/gohugoio/hugo/releases/download/v0.133.0/hugo_extended_0.133.0_darwin-universal.tar.gz
           tar: true
       npm:
         - "@anthropic-ai/claude-code"
