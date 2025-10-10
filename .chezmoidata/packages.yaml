@@ -19,6 +19,7 @@ packages:
       - z
       - fzf
       - fd
+      - mtr
     wgets: []
     npm: []
   profiles:
@@ -33,4 +34,6 @@ packages:
         - "@anthropic-ai/claude-code"
     work:
       npm: []
+      brew: []
+      wgets: []
     
