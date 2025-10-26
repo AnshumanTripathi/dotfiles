@@ -26,6 +26,7 @@ packages:
     personal:
       brew:
         - operator-sdk
+        - gh
       wgets:
         - name: hugo
           url: https://github.com/gohugoio/hugo/releases/download/v0.133.0/hugo_extended_0.133.0_darwin-universal.tar.gz
