@@ -20,6 +20,7 @@ packages:
       - fzf
       - fd
       - mtr
+      - zsh-syntax-highlighting
       # development
       - uv
     wgets: []
