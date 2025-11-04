@@ -20,6 +20,8 @@ packages:
       - fzf
       - fd
       - mtr
+      # development
+      - uv
     wgets: []
     npm: []
   profiles:
