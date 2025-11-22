@@ -3,7 +3,17 @@
 # packages.yaml hash: {{ .packages | toString | sha256sum }}
 # wgets hash: {{ .packages | toString | sha256sum }}
 
-echo "Installing brew packages"
+echo "#############################################"
+echo ""
+echo "Installing core packages with brew"
+echo ""
+
+brew bundle --file=/dev/stdin <<EOF
+{{ range .packages.core.brews -}}
+brew {{ . | quote }}
+{{ end -}}
+EOF
+
 
 echo "#############################################"
 echo ""
@@ -31,6 +41,25 @@ TEMP_DIR=$(mktemp -d)
   rm -rf $TEMP_DIR
 {{ end -}} {{/* range .packages.shared.wgets */}}
 
+echo "#############################################"
+echo ""
+echo "Installing shared packages using asdf"
+echo ""
+
+{{ range .packages.shared.asdf -}}
+  echo "Adding asdf plugin"
+  asdf plugin add {{ .name }} {{ .plugin }}
+
+  echo ""
+  echo "Installing latest version of {{ .name }} with asdf"
+  asdf install {{ .name }} latest
+
+  echo ""
+  echo "Setting global version for {{.name }} to latest"
+  asdf set -u {{ .name }} latest
+
+{{ end -}} {{/* range .packages.shared.asdf */}}
+
 
 echo "#############################################"
 echo ""
@@ -50,11 +79,10 @@ echo ""
 {{ if .packages.profiles -}}
 {{ $profile := .profile -}}
 
-echo "Installing brew packages"
 
 echo "#############################################"
 echo ""
-echo "Installing profile-specific ({{ .profile }}) packages using brew"
+echo "Installing ({{ .profile }}) profile specific packages using brew"
 echo ""
 
 brew bundle --file=/dev/stdin <<EOF
@@ -65,7 +93,7 @@ EOF
 
 echo "#############################################"
 echo ""
-echo "Installing profile-specific ({{ .profile }}) packages using npm"
+echo "Installing ({{ .profile }}) profile specific packages using npm"
 echo ""
 {{ range (index .packages.profiles $profile).npm -}}
   if ! npm list -g {{ . }} &> /dev/null; then
@@ -78,7 +106,7 @@ echo ""
 
 echo "#############################################"
 echo ""
-echo "Installing profile specific ({{ .profile }}) packages using wget"
+echo "Installing ({{ .profile }}) profile specific packages using wget"
 echo ""
 
 {{ range (index .packages.profiles $profile).wgets -}}
@@ -91,5 +119,17 @@ TEMP_DIR=$(mktemp -d)
   rm -rf $TEMP_DIR
 {{ end -}} {{/* range (index .packages.profiles $profile).wgets */}}
 
-{{ end -}}{{/* if .packages.profiles */}}
 
+echo "#############################################"
+echo ""
+echo "Installing ({{ .profile }}) profile specific packages using asdf"
+echo ""
+{{ range (index .packages.profiles $profile).asdf -}}
+  echo "Adding asdf plugin"
+  asdf plugin add {{ .name }} {{ .plugin }}
+  echo "Installing latest version of {{ .name }} with asdf"
+  asdf install {{ .name }} latest
+  echo "Setting global version for {{.name }} to latest"
+  asdf set -u {{ .name }} latest
+{{ end -}} {{/* range (index .packages.profiles $profile).asdf */}}
+{{ end -}}{{/* if .packages.profiles */}}

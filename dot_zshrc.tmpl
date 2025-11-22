@@ -118,6 +118,7 @@ source $ZSH/oh-my-zsh.sh
 PATH=~/.npm-global/bin:$PATH
 PATH=$PATH:/opt/homebrew/bin
 PATH=$PATH:/opt/homebrew/Cellar/bash/5.2.37/bin/
+PATH="${ASDF_DATA_DIR:-$HOME/.asdf}/shims:$PATH"
 export PATH="/opt/homebrew/sbin:$PATH"
 
 # >>>

@@ -1,4 +1,7 @@
 packages:
+  core:
+    brews:
+      - asdf
   shared:
     brews:
       # kubernetes
@@ -25,8 +28,12 @@ packages:
       - uv
     wgets: []
     npm: []
+    asdf:
+      - name: kubectl
+        plugin: https://github.com/asdf-community/asdf-kubectl.git
   profiles:
     personal:
+      asdf: []
       brew:
         - operator-sdk
         - gh
@@ -43,4 +50,6 @@ packages:
       npm: []
       brew: []
       wgets: []
-    
+      asdf:
+        - name: eksctl
+          plugin: https://github.com/elementalvoid/asdf-eksctl.git
