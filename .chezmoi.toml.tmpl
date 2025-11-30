@@ -3,6 +3,11 @@
 {{- $choices := list "personal" "work" -}}
 {{- $profile := promptChoiceOnce . "profile" "Profile to use" $choices -}}
 {{- $useStarshipPrompt := promptBoolOnce . "useStarshipPrompt" "Use starship prompt" -}}
+{{- $haveSigningKey := promptBoolOnce . "haveSigningKey" "Do you have a GPG signing key" -}}
+{{- $signingKey := "" }}
+{{- if $haveSigningKey }}
+{{-     $signingKey = promptStringOnce . "signingKey" "Enter signing key id" }}
+{{- end }}
 encryption = "gpg"
 [gpg]
     args = ["--quiet"]
@@ -11,9 +16,10 @@ encryption = "gpg"
     email = {{ $email | quote  }}
     profile = {{ $profile | quote  }}
     choices = {{ $choices | quote }}
-    useGhostty = {{ $useGhostty | quote }}
+    useGhostty = {{ $useGhostty }}
     useStarshipPrompt = {{ $useStarshipPrompt | quote }}
+    haveSigningKey = {{ $haveSigningKey }}
+    signingKey = {{ $signingKey | quote }}
 [edit]
     command = "code"
     args = ["--wait"]
-
