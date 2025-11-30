@@ -1,6 +1,8 @@
 {{- $email := promptStringOnce . "email" "Email address" -}}
+{{- $useGhostty := promptBoolOnce . "useGhostty" "Use Ghostty" -}}
 {{- $choices := list "personal" "work" -}}
-{{- $profile := promptChoice "Profile to use" $choices -}}
+{{- $profile := promptChoiceOnce . "profile" "Profile to use" $choices -}}
+{{- $useStarshipPrompt := promptBoolOnce . "useStarshipPrompt" "Use starship prompt" -}}
 encryption = "gpg"
 [gpg]
     args = ["--quiet"]
@@ -8,6 +10,9 @@ encryption = "gpg"
 [data]
     email = {{ $email | quote  }}
     profile = {{ $profile | quote  }}
+    choices = {{ $choices | quote }}
+    useGhostty = {{ $useGhostty | quote }}
+    useStarshipPrompt = {{ $useStarshipPrompt | quote }}
 [edit]
     command = "code"
     args = ["--wait"]

@@ -24,6 +24,9 @@ brew bundle --file=/dev/stdin <<EOF
 {{ range .packages.shared.brews -}}
 brew {{ . | quote }}
 {{ end -}}
+{{ range .packages.shared.casks -}}
+cask {{ . | quote }}
+{{ end -}}
 EOF
 
 echo "#############################################"

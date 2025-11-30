@@ -15,7 +15,11 @@ export ZSH="/Users/anshumantripathi/.oh-my-zsh"
 # load a random theme each time oh-my-zsh is loaded, in which case,
 # to know which specific one was loaded, run: echo $RANDOM_THEME
 # See https://github.com/ohmyzsh/ohmyzsh/wiki/Themes
+{{- if .useStarshipPrompt }}
+# ZSH_THEME="powerlevel10k/powerlevel10k"
+{{- else }}
 ZSH_THEME="powerlevel10k/powerlevel10k"
+{{- end }}
 
 # Set list of themes to pick from when loading at random
 # Setting this variable when ZSH_THEME=random will cause zsh to load
@@ -151,7 +155,36 @@ source /opt/homebrew/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
 # Load z directory jumper
 . /opt/homebrew/etc/profile.d/z.sh
 
-EDITOR=vim
+EDITOR=code
+
+{{- if .useStarshipPrompt }}
+# enable starship
+export STARSHIP_CONFIG=~/.config/starship/starship.toml
+eval "$(starship init zsh)"
+
+autoload -Uz add-zsh-hook
+add-zsh-hook precmd transient-prompt-precmd
+
+TRANSIENT_PROMPT="${PROMPT// prompt / prompt --profile transient }"
+TRANSIENT_RPROMPT="${PROMPT// prompt / prompt --profile rtransient }"
+
+function transient-prompt-precmd {
+    # Fix ctrl+c behavior
+    TRAPINT() { transient-prompt; return $(( 128 + $1 )) }
+
+    # Save transient prompt
+    SAVED_PROMPT="$(eval "printf '%s' \"${TRANSIENT_PROMPT}\"")"
+    SAVED_RPROMPT="$(eval "printf '%s' \"${TRANSIENT_RPROMPT}\"")"
+}
+
+autoload -Uz add-zle-hook-widget
+add-zle-hook-widget zle-line-finish transient-prompt
+
+function transient-prompt() {
+    # Use saved transient prompt
+    PROMPT="$SAVED_PROMPT" RPROMPT="$SAVED_RPROMPT" zle .reset-prompt
+}
+{{- end }}
 
 {{- if eq .profile "work" }}
 
@@ -162,7 +195,7 @@ EDITOR=vim
 # >>> 
 
 # gcloud <<<
-export CLOUDSDK_PYTHON='/Users/anshumantripathi/.pyenv/versions/gcloud/bin/python'
+export CLOUDSDK_PYTHON='/Users/anshumantripathi/.pyenv/shims/python'
 
 {{- if eq .profile "work" }}
 # The next line updates PATH for the Google Cloud SDK.
@@ -248,10 +281,10 @@ fi
 
 export PATH=$PATH:/run/current-system/sw/bin
 
-# >>>> Vagrant command completion (start)
+# >>>
+
+# Vagrant command completion <<<
 fpath=(/opt/vagrant/embedded/gems/gems/vagrant-2.4.3/contrib/zsh $fpath)
 compinit
-# <<<<  Vagrant command completion (end)
-
 # >>>
 {{- end }}

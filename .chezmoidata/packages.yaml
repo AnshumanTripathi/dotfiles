@@ -25,7 +25,12 @@ packages:
       - mtr
       - zsh-syntax-highlighting
       # development
-      - uv
+      - pyenv
+      - pyenv-virtualenv
+      - starship
+    casks:
+      - font-jetbrains-mono-nerd-font
+      - ghostty
     wgets: []
     npm: []
     asdf:
@@ -33,7 +38,9 @@ packages:
         plugin: https://github.com/asdf-community/asdf-kubectl.git
   profiles:
     personal:
-      asdf: []
+      asdf:
+        - name: gcloud
+          plugin: https://github.com/jthegedus/asdf-gcloud
       brew:
         - operator-sdk
         - gh
