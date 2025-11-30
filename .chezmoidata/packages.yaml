@@ -36,6 +36,8 @@ packages:
     asdf:
       - name: kubectl
         plugin: https://github.com/asdf-community/asdf-kubectl.git
+      - name: eksctl
+        plugin: https://github.com/elementalvoid/asdf-eksctl.git
   profiles:
     personal:
       asdf:
@@ -57,6 +59,4 @@ packages:
       npm: []
       brew: []
       wgets: []
-      asdf:
-        - name: eksctl
-          plugin: https://github.com/elementalvoid/asdf-eksctl.git
+      asdf: []       
