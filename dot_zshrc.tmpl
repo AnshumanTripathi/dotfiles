@@ -136,16 +136,15 @@ function transient-prompt() {
 
 # >>> 
 
+{{- if eq .profile "personal" }}
 # gcloud <<<
 export CLOUDSDK_PYTHON='/Users/anshumantripathi/.pyenv/shims/python'
 
-{{- if eq .profile "work" }}
 # The next line updates PATH for the Google Cloud SDK.
 if [ -f '/Users/anshumantripathi/gcloud/path.zsh.inc' ]; then . '/Users/anshumantripathi/gcloud/path.zsh.inc'; fi
 
 # The next line enables shell command completion for gcloud.
 if [ -f '/Users/anshumantripathi/gcloud/completion.zsh.inc' ]; then . '/Users/anshumantripathi/gcloud/completion.zsh.inc'; fi
-{{- end }}
 
 # The next line updates PATH for the Google Cloud SDK.
 if [ -f '/Users/anshumantripathi/Downloads/google-cloud-sdk 2/path.zsh.inc' ]; then . '/Users/anshumantripathi/Downloads/google-cloud-sdk 2/path.zsh.inc'; fi
@@ -154,6 +153,7 @@ if [ -f '/Users/anshumantripathi/Downloads/google-cloud-sdk 2/path.zsh.inc' ]; t
 if [ -f '/Users/anshumantripathi/Downloads/google-cloud-sdk 2/completion.zsh.inc' ]; then . '/Users/anshumantripathi/Downloads/google-cloud-sdk 2/completion.zsh.inc'; fi
 
 # >>>
+{{- end }}
 
 # Pyenv <<<
 
