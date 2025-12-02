@@ -14,6 +14,25 @@ brew {{ . | quote }}
 {{ end -}}
 EOF
 
+echo "#############################################"
+echo ""
+echo "Installing core packages with asdf"
+echo ""
+
+{{ range .packages.core.asdf -}}
+  echo "Adding asdf plugin {{ .name }} {{ .plugin }}"
+  asdf plugin add {{ .name }} {{ .plugin }}
+
+  echo ""
+  echo "Installing latest version of {{ .name }} with asdf"
+  asdf install {{ .name }} latest
+
+  echo ""
+  echo "Setting global version for {{.name }} to latest"
+  asdf set -u {{ .name }} latest
+
+{{ end -}} {{/* range .packages.core.asdf */}}
+
 
 echo "#############################################"
 echo ""

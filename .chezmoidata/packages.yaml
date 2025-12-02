@@ -2,6 +2,9 @@ packages:
   core:
     brews:
       - asdf
+    asdf:
+      - name: nodejs
+        plugin: https://github.com/asdf-vm/asdf-nodejs.git
   shared:
     brews:
       # kubernetes
@@ -56,7 +59,8 @@ packages:
       npm:
         - "@anthropic-ai/claude-code"
     work:
-      npm: []
+      npm:
+        - lerna-cli
       brew: []
       wgets: []
       asdf: []       
