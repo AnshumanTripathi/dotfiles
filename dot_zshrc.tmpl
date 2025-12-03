@@ -95,7 +95,7 @@ export FZF_DEFAULT_COMMAND='fd --type file --follow --hidden --exclude .git'
 source /opt/homebrew/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
 
 # Load z directory jumper
-. /opt/homebrew/etc/profile.d/z.sh
+eval "$(zoxide init zsh)"
 
 EDITOR=code
 

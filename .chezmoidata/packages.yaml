@@ -22,16 +22,15 @@ packages:
       # utilities
       - wget
       - gopass
-      - z
       - fzf
       - fd
       - mtr
       - zsh-syntax-highlighting
+      - starship
+      - zoxide
       # development
       - pyenv
       - pyenv-virtualenv
-      - starship
-      - zoxide
     casks:
       - font-jetbrains-mono-nerd-font
       - ghostty
@@ -63,7 +62,7 @@ packages:
       npm:
         - node-waf
         - node-gyp
-        - lerna-cli
+        - lerna
       brew: []
       wgets: []
       asdf: []       
