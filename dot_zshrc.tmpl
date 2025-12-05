@@ -167,7 +167,7 @@ eval "$(pyenv virtualenv-init -)"
 # Utility Functions <<<
 
 function clean_branches {
-    git branch | grep -v "master\|main\|production" | xargs git branch -D
+    git branch --format "%(refname:short)" | grep -v "master\|main\|production|\develop" | xargs git branch -D
     git remote prune origin
 }
 

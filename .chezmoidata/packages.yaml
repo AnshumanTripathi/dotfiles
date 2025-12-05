@@ -63,6 +63,7 @@ packages:
         - node-waf
         - node-gyp
         - lerna
-      brew: []
+      brew:
+        - kubeseal
       wgets: []
       asdf: []       
