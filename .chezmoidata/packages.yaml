@@ -28,6 +28,7 @@ packages:
       - zsh-syntax-highlighting
       - starship
       - zoxide
+      - krew
       # development
       - pyenv
       - pyenv-virtualenv
