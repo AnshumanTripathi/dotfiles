@@ -47,7 +47,7 @@ packages:
       asdf:
         - name: gcloud
           plugin: https://github.com/jthegedus/asdf-gcloud
-      brew:
+      brews:
         - operator-sdk
         - gh
         - nmap
@@ -65,7 +65,8 @@ packages:
         - node-waf
         - node-gyp
         - lerna
-      brew:
+      brews:
         - kubeseal
+        - wireshark
       wgets: []
       asdf: []       

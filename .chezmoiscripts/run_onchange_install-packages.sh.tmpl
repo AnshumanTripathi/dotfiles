@@ -108,7 +108,7 @@ echo "Installing ({{ .profile }}) profile specific packages using brew"
 echo ""
 
 brew bundle --file=/dev/stdin <<EOF
-{{ range (index .packages.profiles $profile).brew -}}
+{{ range (index .packages.profiles $profile).brews -}}
 brew {{ . | quote }}
 {{ end -}}
 EOF
