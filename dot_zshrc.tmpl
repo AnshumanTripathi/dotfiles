@@ -172,6 +172,11 @@ function clean_branches {
     git remote prune origin
 }
 
+function clean_my_branches {
+    git branch --format "%(refname:short)" | grep "anshuman" | xargs git branch -D
+    git remote prune origin
+}
+
 function g_new_branch {
     git stash
     gcm
