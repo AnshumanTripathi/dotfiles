@@ -76,9 +76,9 @@ alias ll='ls -larth'
 # >>>
 
 # Shell Config <<<
+autoload -U compinit && compinit
 autoload -U +X bashcompinit && bashcompinit
-complete -o nospace -C /opt/homebrew/bin/terragrunt terragrunt
-autoload -U compinit; compinit
+complete -o nospace -C "$HOME/.asdf/shims/terragrunt" terragrunt
 
 # zsh-autosuggestion config
 zle_bracketed_paste=()
@@ -124,8 +124,7 @@ autoload -Uz add-zle-hook-widget
 add-zle-hook-widget zle-line-finish transient-prompt
 
 function transient-prompt() {
-    # Use saved transient prompt
-    PROMPT="$SAVED_PROMPT" RPROMPT="$SAVED_RPROMPT" zle .reset-prompt
+    PROMPT="$SAVED_PROMPT" RPROMPT="$SAVED_RPROMPT" zle reset-prompt 2>/dev/null
 }
 {{- end }}
 
