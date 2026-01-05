@@ -2,6 +2,7 @@
 
 # packages.yaml hash: {{ .packages | toString | sha256sum }}
 # wgets hash: {{ .packages | toString | sha256sum }}
+# brewfile - https://docs.brew.sh/Brew-Bundle-and-Brewfile
 
 echo "#############################################"
 echo ""
@@ -38,12 +39,14 @@ echo "#############################################"
 echo ""
 echo "Installing shared packages using brew"
 echo ""
-
 brew bundle --file=/dev/stdin <<EOF
-{{ range .packages.shared.brews -}}
+{{ range .packages.shared.brews.taps -}}
+tap {{ . | quote}}
+{{ end -}}
+{{ range .packages.shared.brews.formulae -}}
 brew {{ . | quote }}
 {{ end -}}
-{{ range .packages.shared.casks -}}
+{{ range .packages.shared.brews.casks -}}
 cask {{ . | quote }}
 {{ end -}}
 EOF
@@ -108,8 +111,14 @@ echo "Installing ({{ .profile }}) profile specific packages using brew"
 echo ""
 
 brew bundle --file=/dev/stdin <<EOF
-{{ range (index .packages.profiles $profile).brews -}}
+{{ range (index .packages.profiles $profile).brews.taps -}}
+tap {{ . | quote }}
+{{ end -}}
+{{ range (index .packages.profiles $profile).brews.formulae -}}
 brew {{ . | quote }}
+{{ end -}}
+{{ range (index .packages.profiles $profile).brews.casks -}}
+cask {{ . | quote }}
 {{ end -}}
 EOF
 

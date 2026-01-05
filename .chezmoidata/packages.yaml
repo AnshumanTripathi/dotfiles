@@ -7,34 +7,35 @@ packages:
         plugin: https://github.com/asdf-vm/asdf-nodejs.git
   shared:
     brews:
-      # kubernetes
-      - helm
-      - kubectl
-      - k9s
-      - kubecm
-      - kubie
-      # shell processing
-      - bash # Updated shell
-      - jq
-      - yq
-      - bat
-      - eza
-      # utilities
-      - wget
-      - gopass
-      - fzf
-      - fd
-      - mtr
-      - zsh-syntax-highlighting
-      - starship
-      - zoxide
-      - krew
-      # development
-      - pyenv
-      - pyenv-virtualenv
-    casks:
-      - font-jetbrains-mono-nerd-font
-      - ghostty@tip # Install ghostty tip version which supports cmd+F search. Replace with stable once the release is out with the search feature.
+      formulae:
+        - helm
+        - kubectl
+        - k9s
+        - kubecm
+        - kubie
+        # shell processing
+        - bash # Updated shell
+        - jq
+        - yq
+        - bat
+        - eza
+        # utilities
+        - wget
+        - gopass
+        - fzf
+        - fd
+        - mtr
+        - zsh-syntax-highlighting
+        - starship
+        - zoxide
+        - krew
+        # development
+        - pyenv
+        - pyenv-virtualenv
+      taps: []
+      casks:
+        - font-jetbrains-mono-nerd-font
+        - ghostty@tip # Install ghostty tip version which supports cmd+F search. Replace with stable once the release is out with the search feature.
     wgets: []
     npm: []
     asdf:
@@ -48,9 +49,12 @@ packages:
         - name: gcloud
           plugin: https://github.com/jthegedus/asdf-gcloud
       brews:
-        - operator-sdk
-        - gh
-        - nmap
+        taps: []
+        formulae:
+          - operator-sdk
+          - gh
+          - nmap
+        casks: []
       wgets:
         - name: hugo
           url: https://github.com/gohugoio/hugo/releases/download/v0.133.0/hugo_extended_0.133.0_darwin-universal.tar.gz
@@ -66,7 +70,12 @@ packages:
         - node-gyp
         - lerna
       brews:
-        - kubeseal
-        - wireshark
+        taps:
+          - redis/redis
+        formulae:
+          - kubeseal
+          - wireshark
+        casks:
+          - redis
       wgets: []
       asdf: []       
