@@ -51,7 +51,6 @@ packages:
       brews:
         taps: []
         formulae:
-          - operator-sdk
           - gh
           - nmap
         casks: []
@@ -65,17 +64,18 @@ packages:
       npm:
         - "@anthropic-ai/claude-code"
     work:
-      npm:
-        - node-waf
-        - node-gyp
-        - lerna
+      npm: []
       brews:
         taps:
           - redis/redis
         formulae:
           - kubeseal
           - wireshark
+          - operator-sdk
         casks:
           - redis
-      wgets: []
+      wgets:
+        - name: kubebuilder
+          url: https://github.com/kubernetes-sigs/kubebuilder/releases/latest/download/kubebuilder_darwin_arm64
+          tar: false
       asdf: []       

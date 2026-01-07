@@ -58,13 +58,16 @@ echo ""
 
 {{ range .packages.shared.wgets -}}
 TEMP_DIR=$(mktemp -d)
+echo "Fetching {{ .name }}"
   {{ if  .tar -}}
-    echo "Fetching tar {{ .name }}"
     wget {{ .url }} -O - | tar -xz -C "$TEMP_DIR"
-    mv $TEMP_DIR/{{ .name }} /usr/local/bin
+  {{ else -}}
+    wget {{ .url }} -O $TEMP_DIR/{{ .name }}
+    ls "$TEMP_DIR"/{{ .name }}
   {{ end -}}
-  rm -rf $TEMP_DIR
-{{ end -}} {{/* range .packages.shared.wgets */}}
+  mv "$TEMP_DIR"/{{ .name }} "$HOME/bin/"
+  chmod +x "$HOME/bin/{{ .name }}"
+{{ end -}} {{/* rrange .packages.shared.wgets */}}
 
 echo "#############################################"
 echo ""
@@ -142,14 +145,16 @@ echo ""
 
 {{ range (index .packages.profiles $profile).wgets -}}
 TEMP_DIR=$(mktemp -d)
+echo "Fetching {{ .name }}"
   {{ if  .tar -}}
-    echo "Fetching tar {{ .name }}"
     wget {{ .url }} -O - | tar -xz -C "$TEMP_DIR"
-    mv $TEMP_DIR/{{ .name }} /usr/local/bin
+  {{ else -}}
+    wget {{ .url }} -O $TEMP_DIR/{{ .name }}
+    ls "$TEMP_DIR"/{{ .name }}
   {{ end -}}
-  rm -rf $TEMP_DIR
+  mv "$TEMP_DIR"/{{ .name }} "$HOME/bin/"
+  chmod +x "$HOME/bin/{{ .name }}"
 {{ end -}} {{/* range (index .packages.profiles $profile).wgets */}}
-
 
 echo "#############################################"
 echo ""
