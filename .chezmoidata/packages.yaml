@@ -68,10 +68,12 @@ packages:
       brews:
         taps:
           - redis/redis
+          - snyk/tap
         formulae:
           - kubeseal
           - wireshark
           - operator-sdk
+          - snyk/tap/snyk
         casks:
           - redis
       wgets:
