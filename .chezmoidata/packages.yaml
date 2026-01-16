@@ -29,6 +29,7 @@ packages:
         - starship
         - zoxide
         - krew
+        - pinentry-mac
         # development
         - pyenv
         - pyenv-virtualenv
