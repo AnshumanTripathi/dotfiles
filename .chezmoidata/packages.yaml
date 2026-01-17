@@ -30,6 +30,7 @@ packages:
         - zoxide
         - krew
         - pinentry-mac
+        - dive
         # development
         - pyenv
         - pyenv-virtualenv
