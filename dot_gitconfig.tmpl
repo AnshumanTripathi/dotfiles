@@ -1,0 +1,29 @@
+{{- if eq .profile "personal" }}
+# This is Git's per-user configuration file.
+[user]
+    name = Anshuman Tripathi
+    email = anshuman.tripathi305@gmail.com
+    {{- if .haveSigningKey }}
+        signingkey = {{ .signingKey }}
+    {{- end }}
+{{- else if eq .profile "work" }}
+[user]
+    {{- if .haveSigningKey }}
+        signingkey = {{ .signingKey }}
+    {{- end }}
+	email = {{ .email }}
+	name = Anshuman Tripathi
+{{- end }}
+[url "git@github.com:"]
+	insteadOf = https://github.com/
+[gpg]
+    program = /opt/homebrew/bin/gpg
+[commit]
+    gpgsign = true
+[pull]
+    rebase = true
+[core]
+    excludesFile = /Users/anshumantripathi/.config/git/ignore
+    editor = code --wait --reuse-window
+[push]
+    autoSetupRemote = true
