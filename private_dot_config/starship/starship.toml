@@ -23,7 +23,7 @@ error_symbol = '[❯](bold red)'
 [directory]
 style = "fg:crust bg:peach"
 format = "[](fg:peach)[ $path ]($style)"
-truncation_length = 3
+truncation_length = 5
 truncate_to_repo = false
 
 [git_branch]
