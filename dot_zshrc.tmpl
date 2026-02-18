@@ -133,6 +133,9 @@ function transient-prompt() {
 
 [[ -f ~/.zsh/private.zsh ]] && source ~/.zsh/private.zsh
 
+# direnv
+eval "$(direnv hook zsh)"
+
 {{- end }}
 
 # >>> 

@@ -76,6 +76,7 @@ packages:
           - wireshark
           - operator-sdk
           - snyk/tap/snyk
+          - direnv
         casks:
           - redis
       wgets:
