@@ -1,0 +1,13 @@
+{{- if eq .profile "work" }}
+try_aws_login () {
+        CURRENT_ACCOUNT=$(aws sts get-caller-identity --query "Account" --output text 2>/dev/null) 
+        if [ "$CURRENT_ACCOUNT" != "$TARGET_ACCOUNT" ]
+        then
+                echo "⚠️ Account mismatch or session expired (Current: ${CURRENT_ACCOUNT:-None}, Target: $TARGET_ACCOUNT)"
+                echo "Initiating SSO login for $AWS_PROFILE..."
+                aws sso login
+        else
+                echo "✅ Already authenticated to Account: $TARGET_ACCOUNT ($AWS_PROFILE)"
+        fi
+}
+{{- end }}
