@@ -56,6 +56,7 @@ packages:
         formulae:
           - gh
           - nmap
+          - tailscale
         casks: []
       wgets:
         - name: hugo
