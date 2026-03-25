@@ -34,10 +34,11 @@ packages:
         # development
         - pyenv
         - pyenv-virtualenv
+        - nmap
       taps: []
       casks:
         - font-jetbrains-mono-nerd-font
-        - ghostty@tip # Install ghostty tip version which supports cmd+F search. Replace with stable once the release is out with the search feature.
+        - ghostty
     wgets: []
     npm: []
     asdf:
