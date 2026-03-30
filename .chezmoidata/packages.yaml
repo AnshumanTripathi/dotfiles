@@ -35,6 +35,7 @@ packages:
         - pyenv
         - pyenv-virtualenv
         - nmap
+        - rtk
       taps: []
       casks:
         - font-jetbrains-mono-nerd-font

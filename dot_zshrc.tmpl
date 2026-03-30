@@ -67,6 +67,7 @@ PATH=$PATH:/opt/homebrew/Cellar/bash/5.2.37/bin/
 PATH="${ASDF_DATA_DIR:-$HOME/.asdf}/shims:$PATH"
 PATH="${KREW_ROOT:-$HOME/.krew}/bin:$PATH"
 PATH="$PATH:$HOME/bin"
+PATH="$PATH:$HOME/.local/bin"
 export PATH="/opt/homebrew/sbin:$PATH"
 
 # >>>
@@ -140,6 +141,9 @@ eval "$(direnv hook zsh)"
 export PATH="/Users/anshumantripathi/.codeium/windsurf/bin:$PATH"
 
 {{- end }}
+
+# rtk config
+export RTK_TELEMETRY_DISABLED=1
 
 # >>> 
 
