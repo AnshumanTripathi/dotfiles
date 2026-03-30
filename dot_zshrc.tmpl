@@ -137,9 +137,12 @@ function transient-prompt() {
 # direnv
 eval "$(direnv hook zsh)"
 
+{{- end }}
+
+{{- if eq .aiAgent "windsurf" }}
+
 # windsurf
 export PATH="/Users/anshumantripathi/.codeium/windsurf/bin:$PATH"
-
 {{- end }}
 
 # rtk config

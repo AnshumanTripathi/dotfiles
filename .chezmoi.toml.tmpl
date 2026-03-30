@@ -8,6 +8,12 @@
 {{- if $haveSigningKey }}
 {{-     $signingKey = promptStringOnce . "signingKey" "Enter signing key id" }}
 {{- end }}
+{{- $useAIAgent := promptBoolOnce . "useAIAgent" "Use an AI coding agent" -}}
+{{- $aiAgent := "" }}
+{{- if $useAIAgent }}
+{{-     $aiAgentChoices := list "windsurf" "claude-code" -}}
+{{-     $aiAgent = promptChoiceOnce . "aiAgent" "AI agent" $aiAgentChoices }}
+{{- end }}
 encryption = "gpg"
 [gpg]
     args = ["--quiet"]
@@ -20,6 +26,8 @@ encryption = "gpg"
     useStarshipPrompt = {{ $useStarshipPrompt | quote }}
     haveSigningKey = {{ $haveSigningKey }}
     signingKey = {{ $signingKey | quote }}
+    useAIAgent = {{ $useAIAgent }}
+    aiAgent = {{ $aiAgent | quote }}
 [edit]
     command = "code"
     args = ["--wait"]

@@ -169,3 +169,15 @@ echo ""
   asdf set -u {{ .name }} latest
 {{ end -}} {{/* range (index .packages.profiles $profile).asdf */}}
 {{ end -}}{{/* if .packages.profiles */}}
+
+{{ if eq .aiAgent "claude-code" -}}
+echo "#############################################"
+echo ""
+echo "Installing Claude Code"
+echo ""
+if ! npm list -g @anthropic-ai/claude-code &> /dev/null; then
+  npm install -g @anthropic-ai/claude-code
+else
+  echo "@anthropic-ai/claude-code already installed"
+fi
+{{ end -}}{{/* if eq .aiAgent "claude-code" */}}

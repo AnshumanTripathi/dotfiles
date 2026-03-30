@@ -66,8 +66,7 @@ packages:
         - name: labctl
           url: https://github.com/iximiuz/labctl/releases/download/v0.1.48/labctl_darwin_arm64.tar.gz
           tar: true
-      npm:
-        - "@anthropic-ai/claude-code"
+      npm: []
     work:
       npm: []
       brews:
