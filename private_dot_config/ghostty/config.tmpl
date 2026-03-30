@@ -2,11 +2,17 @@
 font-size = 16
 font-family = JetBrainsMono Nerd Font
 theme = Catppuccin Mocha
+{{- if eq .chezmoi.os "darwin" }}
 macos-option-as-alt = true
+{{- end }}
 scrollback-limit = 4294967295
+{{- if eq .chezmoi.os "darwin" }}
 keybind = cmd+right=text:\x05
 keybind = cmd+left=text:\x01
-keybind = alt+delete=text:\x0b
+{{- else }}
+keybind = super+right=text:\x05
+keybind = super+left=text:\x01
+{{- end }}
 keybind = alt+delete=text:\x0b
 window-inherit-font-size = true
 {{- end }}

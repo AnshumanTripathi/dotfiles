@@ -10,7 +10,7 @@ This repo is used with both Claude Code and Windsurf. Their project instruction 
 
 ## What This Is
 
-A [chezmoi](https://www.chezmoi.io/) dotfiles repository managing shell config, git config, editor setup, and package installations across two profiles: **personal** and **work**. Uses GPG encryption for secrets.
+A [chezmoi](https://www.chezmoi.io/) dotfiles repository managing shell config, git config, editor setup, and package installations across two profiles (**personal** / **work**) and two platforms (**macOS** / **Arch Linux**). Uses GPG encryption for secrets.
 
 ## Key Commands
 
@@ -26,18 +26,20 @@ chezmoi execute-template < file  # Test template rendering
 
 ## Architecture
 
-### Profile System
-The repo supports two profiles (`personal` / `work`) chosen during `chezmoi init`. Profile selection drives conditional blocks throughout templates (`.tmpl` files) and determines which packages get installed. Template data is configured in [.chezmoi.toml.tmpl](.chezmoi.toml.tmpl) via interactive prompts and stored in `~/.config/chezmoi/chezmoi.toml`.
+### Profile & OS System
+The repo supports two profiles (`personal` / `work`) chosen during `chezmoi init`, and two platforms (`darwin` / `linux`) detected automatically via `.chezmoi.os`. Profile selection and OS detection drive conditional blocks throughout templates (`.tmpl` files) and determine which packages get installed. Template data is configured in [.chezmoi.toml.tmpl](.chezmoi.toml.tmpl) via interactive prompts and stored in `~/.config/chezmoi/chezmoi.toml`.
 
-Key template variables: `.profile`, `.email`, `.useGhostty`, `.useStarshipPrompt`, `.haveSigningKey`, `.signingKey`, `.useAIAgent`, `.aiAgent`.
+Key template variables: `.chezmoi.os`, `.profile`, `.email`, `.useGhostty`, `.useStarshipPrompt`, `.haveSigningKey`, `.signingKey`, `.useAIAgent`, `.aiAgent`.
 
 ### Package Management
-Packages are declared in [.chezmoidata/packages.yaml](.chezmoidata/packages.yaml) with three tiers:
-- **core** - Installed on all machines (asdf, nodejs)
-- **shared** - Common tools across profiles (kubectl, helm, fzf, bat, starship, etc.)
-- **profiles.personal / profiles.work** - Profile-specific packages
+Packages are declared in [.chezmoidata/packages.yaml](.chezmoidata/packages.yaml) keyed by **package manager**, with three tiers each:
+- **`brew`** (macOS) — `core`, `shared`, `profiles.personal`, `profiles.work` with formulae/taps/casks
+- **`pacman`** (Arch Linux) — `core`, `shared`, `profiles.personal`, `profiles.work` with packages/aur lists
+- **`common`** (cross-platform) — `core`, `shared`, `profiles` with asdf plugins, npm globals, and wget binaries (wget URLs are OS-keyed under `wgets.darwin` / `wgets.linux`)
 
-Installation is handled by [.chezmoiscripts/run_onchange_install-packages.sh.tmpl](.chezmoiscripts/run_onchange_install-packages.sh.tmpl), which re-runs when packages.yaml changes (sha256 hash in comment). Package sources: Homebrew (formulae/casks/taps), wget (binaries to `~/bin/`), npm globals, and asdf plugins.
+To add support for another distro (e.g., Ubuntu), add a new top-level key (e.g., `apt`) and corresponding conditionals in the install script.
+
+Installation is handled by [.chezmoiscripts/run_onchange_install-packages.sh.tmpl](.chezmoiscripts/run_onchange_install-packages.sh.tmpl), which re-runs when packages.yaml changes (sha256 hash in comment). The script detects the OS and uses `brew bundle` on macOS or `pacman`/`yay` on Arch Linux. On Arch, `yay` is auto-bootstrapped if not present.
 
 ### Script Execution Order
 Chezmoi scripts in [.chezmoiscripts/](.chezmoiscripts/) follow naming conventions that control timing:
@@ -53,7 +55,7 @@ Chezmoi file prefixes map to target paths: `dot_` = `.`, `private_dot_config/` =
 
 ## When Modifying
 
-- To add a package: edit [.chezmoidata/packages.yaml](.chezmoidata/packages.yaml) under the appropriate tier/profile
-- To add shell config: edit [dot_zshrc.tmpl](dot_zshrc.tmpl), wrapping profile-specific blocks in `{{- if eq .profile "work" }}` / `{{- end }}`
+- To add a package: edit [.chezmoidata/packages.yaml](.chezmoidata/packages.yaml) under the appropriate package manager key (`brew`/`pacman`) and tier. For cross-platform tools (asdf, npm, wget), add under `common`
+- To add shell config: edit [dot_zshrc.tmpl](dot_zshrc.tmpl), wrapping profile-specific blocks in `{{- if eq .profile "work" }}` / `{{- end }}` and OS-specific blocks in `{{- if eq .chezmoi.os "darwin" }}` / `{{- end }}`
 - To add a new managed config file: use `chezmoi add` or manually create with correct chezmoi naming prefixes
 - Template syntax is Go text/template; use `chezmoi execute-template` to test before applying

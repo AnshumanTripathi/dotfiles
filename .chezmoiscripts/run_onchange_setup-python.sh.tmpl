@@ -7,8 +7,14 @@ set -e
 
 # Ensure pyenv is installed
 if ! command -v pyenv &> /dev/null; then
+{{- if eq .chezmoi.os "darwin" }}
     echo "pyenv is not installed. Installing via homebrew..."
     brew install pyenv pyenv-virtualenv
+{{- else if eq .chezmoi.os "linux" }}
+    echo "pyenv is not installed. Installing via pacman..."
+    sudo pacman -S --needed --noconfirm pyenv
+    yay -S --needed --noconfirm pyenv-virtualenv
+{{- end }}
 fi
 
 # Check if any Python versions are already installed

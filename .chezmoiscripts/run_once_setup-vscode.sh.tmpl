@@ -5,6 +5,7 @@
 
 set -e
 
+{{ if eq .chezmoi.os "darwin" -}}
 VSCODE_APP="/Applications/Visual Studio Code.app"
 CODE_BIN_PATH="/usr/local/bin/code"
 
@@ -62,3 +63,18 @@ echo ""
 echo "#############################################"
 echo "VS Code setup complete!"
 echo "#############################################"
+
+{{ else if eq .chezmoi.os "linux" -}}
+if ! command -v code &> /dev/null; then
+    echo "#############################################"
+    echo ""
+    echo "Installing Visual Studio Code"
+    echo ""
+    sudo pacman -S --noconfirm code
+    echo ""
+    echo "VS Code setup complete!"
+    echo "#############################################"
+else
+    echo "VS Code is already installed."
+fi
+{{ end -}}

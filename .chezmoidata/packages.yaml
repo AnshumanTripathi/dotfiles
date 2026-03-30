@@ -1,12 +1,10 @@
 packages:
-  core:
-    brews:
-      - asdf
-    asdf:
-      - name: nodejs
-        plugin: https://github.com/asdf-vm/asdf-nodejs.git
-  shared:
-    brews:
+  # ── macOS (Homebrew) ──
+  brew:
+    core:
+      formulae:
+        - asdf
+    shared:
       formulae:
         - helm
         - kubectl
@@ -40,36 +38,15 @@ packages:
       casks:
         - font-jetbrains-mono-nerd-font
         - ghostty
-    wgets: []
-    npm: []
-    asdf:
-      - name: kubectl
-        plugin: https://github.com/asdf-community/asdf-kubectl.git
-      - name: eksctl
-        plugin: https://github.com/elementalvoid/asdf-eksctl.git
-  profiles:
-    personal:
-      asdf:
-        - name: gcloud
-          plugin: https://github.com/jthegedus/asdf-gcloud
-      brews:
+    profiles:
+      personal:
         taps: []
         formulae:
           - gh
           - nmap
           - tailscale
         casks: []
-      wgets:
-        - name: hugo
-          url: https://github.com/gohugoio/hugo/releases/download/v0.133.0/hugo_extended_0.133.0_darwin-universal.tar.gz
-          tar: true
-        - name: labctl
-          url: https://github.com/iximiuz/labctl/releases/download/v0.1.48/labctl_darwin_arm64.tar.gz
-          tar: true
-      npm: []
-    work:
-      npm: []
-      brews:
+      work:
         taps:
           - redis/redis
           - snyk/tap
@@ -81,8 +58,110 @@ packages:
           - direnv
         casks:
           - redis
-      wgets:
-        - name: kubebuilder
-          url: https://github.com/kubernetes-sigs/kubebuilder/releases/latest/download/kubebuilder_darwin_arm64
-          tar: false
-      asdf: []       
+
+  # ── Arch Linux (pacman + yay/AUR) ──
+  pacman:
+    core:
+      packages:
+        - base-devel
+        - git
+      aur: []
+    shared:
+      packages:
+        - helm
+        - kubectl
+        - k9s
+        - bash
+        - jq
+        - yq
+        - bat
+        - eza
+        - wget
+        - gopass
+        - fzf
+        - fd
+        - mtr
+        - zsh-syntax-highlighting
+        - starship
+        - zoxide
+        - dive
+        - pyenv
+        - nmap
+      aur:
+        - asdf-vm
+        - kubecm
+        - kubie
+        - krew-bin
+        - pyenv-virtualenv
+        - ghostty-git
+        - ttf-jetbrains-mono-nerd
+        - rtk
+    profiles:
+      personal:
+        packages:
+          - github-cli
+          - nmap
+          - tailscale
+        aur: []
+      work:
+        packages:
+          - kubeseal
+          - wireshark-qt
+          - direnv
+        aur:
+          - operator-sdk-bin
+          - snyk
+
+  # Future: just add a new key
+  # apt:
+  #   core: ...
+  #   shared: ...
+  #   profiles: ...
+
+  # ── Cross-platform (always installed regardless of OS) ──
+  common:
+    core:
+      asdf:
+        - name: nodejs
+          plugin: https://github.com/asdf-vm/asdf-nodejs.git
+    shared:
+      wgets: []
+      npm: []
+      asdf:
+        - name: kubectl
+          plugin: https://github.com/asdf-community/asdf-kubectl.git
+        - name: eksctl
+          plugin: https://github.com/elementalvoid/asdf-eksctl.git
+    profiles:
+      personal:
+        asdf:
+          - name: gcloud
+            plugin: https://github.com/jthegedus/asdf-gcloud
+        wgets:
+          darwin:
+            - name: hugo
+              url: https://github.com/gohugoio/hugo/releases/download/v0.133.0/hugo_extended_0.133.0_darwin-universal.tar.gz
+              tar: true
+            - name: labctl
+              url: https://github.com/iximiuz/labctl/releases/download/v0.1.48/labctl_darwin_arm64.tar.gz
+              tar: true
+          linux:
+            - name: hugo
+              url: https://github.com/gohugoio/hugo/releases/download/v0.133.0/hugo_extended_0.133.0_linux-amd64.tar.gz
+              tar: true
+            - name: labctl
+              url: https://github.com/iximiuz/labctl/releases/download/v0.1.48/labctl_linux_amd64.tar.gz
+              tar: true
+        npm: []
+      work:
+        asdf: []
+        wgets:
+          darwin:
+            - name: kubebuilder
+              url: https://github.com/kubernetes-sigs/kubebuilder/releases/latest/download/kubebuilder_darwin_arm64
+              tar: false
+          linux:
+            - name: kubebuilder
+              url: https://github.com/kubernetes-sigs/kubebuilder/releases/latest/download/kubebuilder_linux_amd64
+              tar: false
+        npm: []

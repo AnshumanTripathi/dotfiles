@@ -1,9 +1,10 @@
 {{- if eq .profile "personal" }}
+{{- if eq .chezmoi.os "darwin" }}
 eval "$(/opt/homebrew/bin/brew shellenv)"
-
 
 # Added by Toolbox App
 export PATH="$PATH:/usr/local/bin"
+{{- end }}
 
 # Load virtualenv
 export PYENV_ROOT="$HOME/.pyenv"

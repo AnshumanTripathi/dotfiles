@@ -1,26 +1,55 @@
 #!/bin/bash
 
 # packages.yaml hash: {{ .packages | toString | sha256sum }}
-# wgets hash: {{ .packages | toString | sha256sum }}
-# brewfile - https://docs.brew.sh/Brew-Bundle-and-Brewfile
+
+{{ $os := .chezmoi.os -}}
+{{ $profile := .profile -}}
+
+{{ if eq $os "linux" -}}
+# ── Bootstrap yay AUR helper (Arch Linux) ──
+if ! command -v yay &> /dev/null; then
+    echo "#############################################"
+    echo ""
+    echo "Installing yay AUR helper"
+    echo ""
+    sudo pacman -S --needed --noconfirm base-devel git
+    TEMP_DIR=$(mktemp -d)
+    git clone https://aur.archlinux.org/yay.git "$TEMP_DIR/yay"
+    cd "$TEMP_DIR/yay" && makepkg -si --noconfirm
+    cd - > /dev/null
+    rm -rf "$TEMP_DIR"
+fi
+{{ end -}}
 
 echo "#############################################"
 echo ""
-echo "Installing core packages with brew"
+echo "Installing core packages"
 echo ""
 
+{{ if eq $os "darwin" -}}
 brew bundle --file=/dev/stdin <<EOF
-{{ range .packages.core.brews -}}
+{{ range .packages.brew.core.formulae -}}
 brew {{ . | quote }}
 {{ end -}}
 EOF
+{{ else if eq $os "linux" -}}
+sudo pacman -S --needed --noconfirm \
+{{ range .packages.pacman.core.packages }}  {{ . }} \
+{{ end }}
+
+{{ if .packages.pacman.core.aur -}}
+yay -S --needed --noconfirm \
+{{ range .packages.pacman.core.aur }}  {{ . }} \
+{{ end }}
+{{ end -}}
+{{ end -}}
 
 echo "#############################################"
 echo ""
 echo "Installing core packages with asdf"
 echo ""
 
-{{ range .packages.core.asdf -}}
+{{ range .packages.common.core.asdf -}}
   echo "Adding asdf plugin {{ .name }} {{ .plugin }}"
   asdf plugin add {{ .name }} {{ .plugin }}
 
@@ -32,31 +61,45 @@ echo ""
   echo "Setting global version for {{.name }} to latest"
   asdf set -u {{ .name }} latest
 
-{{ end -}} {{/* range .packages.core.asdf */}}
+{{ end -}} {{/* range .packages.common.core.asdf */}}
 
 
 echo "#############################################"
 echo ""
-echo "Installing shared packages using brew"
+echo "Installing shared packages"
 echo ""
+
+{{ if eq $os "darwin" -}}
 brew bundle --file=/dev/stdin <<EOF
-{{ range .packages.shared.brews.taps -}}
+{{ range .packages.brew.shared.taps -}}
 tap {{ . | quote}}
 {{ end -}}
-{{ range .packages.shared.brews.formulae -}}
+{{ range .packages.brew.shared.formulae -}}
 brew {{ . | quote }}
 {{ end -}}
-{{ range .packages.shared.brews.casks -}}
+{{ range .packages.brew.shared.casks -}}
 cask {{ . | quote }}
 {{ end -}}
 EOF
+{{ else if eq $os "linux" -}}
+sudo pacman -S --needed --noconfirm \
+{{ range .packages.pacman.shared.packages }}  {{ . }} \
+{{ end }}
+
+echo ""
+echo "Installing shared AUR packages"
+echo ""
+yay -S --needed --noconfirm \
+{{ range .packages.pacman.shared.aur }}  {{ . }} \
+{{ end }}
+{{ end -}}
 
 echo "#############################################"
 echo ""
 echo "Installing shared packages using wget"
 echo ""
 
-{{ range .packages.shared.wgets -}}
+{{ range .packages.common.shared.wgets -}}
 TEMP_DIR=$(mktemp -d)
 echo "Fetching {{ .name }}"
   {{ if  .tar -}}
@@ -67,14 +110,14 @@ echo "Fetching {{ .name }}"
   {{ end -}}
   mv "$TEMP_DIR"/{{ .name }} "$HOME/bin/"
   chmod +x "$HOME/bin/{{ .name }}"
-{{ end -}} {{/* rrange .packages.shared.wgets */}}
+{{ end -}} {{/* range .packages.common.shared.wgets */}}
 
 echo "#############################################"
 echo ""
 echo "Installing shared packages using asdf"
 echo ""
 
-{{ range .packages.shared.asdf -}}
+{{ range .packages.common.shared.asdf -}}
   echo "Adding asdf plugin"
   asdf plugin add {{ .name }} {{ .plugin }}
 
@@ -86,15 +129,9 @@ echo ""
   echo "Setting global version for {{.name }} to latest"
   asdf set -u {{ .name }} latest
 
-{{ end -}} {{/* range .packages.shared.asdf */}}
+{{ end -}} {{/* range .packages.common.shared.asdf */}}
 
-
-echo "#############################################"
-echo ""
-echo "Installing profile-specific ({{ .profile }}) packages using brew"
-echo ""
-
-{{ range .packages.shared.npm -}}
+{{ range .packages.common.shared.npm -}}
   if ! npm list -g {{ . }} &> /dev/null; then
     echo "Installing {{ . }}"
     npm install -g {{ . }}
@@ -104,46 +141,57 @@ echo ""
 {{ end -}}
 
 
-{{ if .packages.profiles -}}
-{{ $profile := .profile -}}
-
+{{ if .packages.common.profiles -}}
 
 echo "#############################################"
 echo ""
-echo "Installing ({{ .profile }}) profile specific packages using brew"
+echo "Installing ({{ .profile }}) profile specific packages"
 echo ""
 
+{{ if eq $os "darwin" -}}
 brew bundle --file=/dev/stdin <<EOF
-{{ range (index .packages.profiles $profile).brews.taps -}}
+{{ range (index .packages.brew.profiles $profile).taps -}}
 tap {{ . | quote }}
 {{ end -}}
-{{ range (index .packages.profiles $profile).brews.formulae -}}
+{{ range (index .packages.brew.profiles $profile).formulae -}}
 brew {{ . | quote }}
 {{ end -}}
-{{ range (index .packages.profiles $profile).brews.casks -}}
+{{ range (index .packages.brew.profiles $profile).casks -}}
 cask {{ . | quote }}
 {{ end -}}
 EOF
+{{ else if eq $os "linux" -}}
+sudo pacman -S --needed --noconfirm \
+{{ range (index .packages.pacman.profiles $profile).packages }}  {{ . }} \
+{{ end }}
+
+{{ if (index .packages.pacman.profiles $profile).aur -}}
+yay -S --needed --noconfirm \
+{{ range (index .packages.pacman.profiles $profile).aur }}  {{ . }} \
+{{ end }}
+{{ end -}}
+{{ end -}}
 
 echo "#############################################"
 echo ""
 echo "Installing ({{ .profile }}) profile specific packages using npm"
 echo ""
-{{ range (index .packages.profiles $profile).npm -}}
+{{ range (index .packages.common.profiles $profile).npm -}}
   if ! npm list -g {{ . }} &> /dev/null; then
     echo "Installing {{ . }} for {{ $profile }} profile"
     npm install -g {{ . }}
   else
     echo "{{ . }} already installed"
   fi
-{{ end -}}{{/* range (index .packages.profiles $profile).npm */}}
+{{ end -}}{{/* range (index .packages.common.profiles $profile).npm */}}
 
 echo "#############################################"
 echo ""
 echo "Installing ({{ .profile }}) profile specific packages using wget"
 echo ""
 
-{{ range (index .packages.profiles $profile).wgets -}}
+{{ if eq $os "darwin" -}}
+{{ range (index .packages.common.profiles $profile).wgets.darwin -}}
 TEMP_DIR=$(mktemp -d)
 echo "Fetching {{ .name }}"
   {{ if  .tar -}}
@@ -154,30 +202,48 @@ echo "Fetching {{ .name }}"
   {{ end -}}
   mv "$TEMP_DIR"/{{ .name }} "$HOME/bin/"
   chmod +x "$HOME/bin/{{ .name }}"
-{{ end -}} {{/* range (index .packages.profiles $profile).wgets */}}
+{{ end -}} {{/* range wgets.darwin */}}
+{{ else if eq $os "linux" -}}
+{{ range (index .packages.common.profiles $profile).wgets.linux -}}
+TEMP_DIR=$(mktemp -d)
+echo "Fetching {{ .name }}"
+  {{ if  .tar -}}
+    wget {{ .url }} -O - | tar -xz -C "$TEMP_DIR"
+  {{ else -}}
+    wget {{ .url }} -O $TEMP_DIR/{{ .name }}
+    ls "$TEMP_DIR"/{{ .name }}
+  {{ end -}}
+  mv "$TEMP_DIR"/{{ .name }} "$HOME/bin/"
+  chmod +x "$HOME/bin/{{ .name }}"
+{{ end -}} {{/* range wgets.linux */}}
+{{ end -}}
 
 echo "#############################################"
 echo ""
 echo "Installing ({{ .profile }}) profile specific packages using asdf"
 echo ""
-{{ range (index .packages.profiles $profile).asdf -}}
+{{ range (index .packages.common.profiles $profile).asdf -}}
   echo "Adding asdf plugin"
   asdf plugin add {{ .name }} {{ .plugin }}
   echo "Installing latest version of {{ .name }} with asdf"
   asdf install {{ .name }} latest
   echo "Setting global version for {{.name }} to latest"
   asdf set -u {{ .name }} latest
-{{ end -}} {{/* range (index .packages.profiles $profile).asdf */}}
-{{ end -}}{{/* if .packages.profiles */}}
+{{ end -}} {{/* range (index .packages.common.profiles $profile).asdf */}}
+{{ end -}}{{/* if .packages.common.profiles */}}
 
 {{ if eq .aiAgent "claude-code" -}}
 echo "#############################################"
 echo ""
 echo "Installing Claude Code"
 echo ""
+{{ if eq $os "darwin" -}}
+brew install --cask claude-code
+{{ else if eq $os "linux" -}}
 if ! npm list -g @anthropic-ai/claude-code &> /dev/null; then
   npm install -g @anthropic-ai/claude-code
 else
   echo "@anthropic-ai/claude-code already installed"
 fi
+{{ end -}}
 {{ end -}}{{/* if eq .aiAgent "claude-code" */}}
