@@ -65,13 +65,15 @@ packages:
       packages:
         - base-devel
         - git
+        - tlp
       aur: []
     shared:
       packages:
+        # Cloud 
         - helm
         - kubectl
         - k9s
-        - bash
+        # Shell processing
         - jq
         - yq
         - bat
@@ -85,21 +87,27 @@ packages:
         - starship
         - zoxide
         - dive
+        # Development
+        - tk
         - pyenv
         - nmap
+        - ghostty
+        # utilities
+        - xclip
       aur:
         - asdf-vm
         - kubecm
         - kubie
         - krew-bin
         - pyenv-virtualenv
-        - ghostty-git
         - ttf-jetbrains-mono-nerd
         - rtk
+        - zoom
     profiles:
       personal:
         packages:
           - github-cli
+          - keyd
           - nmap
           - tailscale
         aur: []
@@ -121,9 +129,9 @@ packages:
   # ── Cross-platform (always installed regardless of OS) ──
   common:
     core:
-      asdf:
-        - name: nodejs
-          plugin: https://github.com/asdf-vm/asdf-nodejs.git
+      asdf: []
+      #   - name: nodejs
+      #     plugin: https://github.com/asdf-vm/asdf-nodejs.git
     shared:
       wgets: []
       npm: []
@@ -132,6 +140,8 @@ packages:
           plugin: https://github.com/asdf-community/asdf-kubectl.git
         - name: eksctl
           plugin: https://github.com/elementalvoid/asdf-eksctl.git
+        - name: nodejs
+          plugin: https://github.com/asdf-vm/asdf-nodejs.git
     profiles:
       personal:
         asdf:

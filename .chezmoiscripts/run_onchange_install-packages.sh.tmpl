@@ -49,6 +49,8 @@ echo ""
 echo "Installing core packages with asdf"
 echo ""
 
+# Setup path before processing
+PATH="${ASDF_DATA_DIR:-$HOME/.asdf}/shims:$PATH"
 {{ range .packages.common.core.asdf -}}
   echo "Adding asdf plugin {{ .name }} {{ .plugin }}"
   asdf plugin add {{ .name }} {{ .plugin }}
@@ -240,8 +242,11 @@ echo ""
 {{ if eq $os "darwin" -}}
 brew install --cask claude-code
 {{ else if eq $os "linux" -}}
-if ! npm list -g @anthropic-ai/claude-code &> /dev/null; then
+if ! command -v claude &> /dev/null; then
   npm install -g @anthropic-ai/claude-code
+  # Native install
+  calude install
+  npm uninstall -g @anthropic-ai/claude-code
 else
   echo "@anthropic-ai/claude-code already installed"
 fi
