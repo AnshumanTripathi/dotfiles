@@ -1,5 +1,9 @@
 {{- $email := promptStringOnce . "email" "Email address" -}}
 {{- $useGhostty := promptBoolOnce . "useGhostty" "Use Ghostty" -}}
+{{- $terminalFont := 16 }}
+{{- if $useGhostty }}
+{{-     $terminalFont = promptIntOnce . "terminalFont" "Enter terminal font" 16 }}
+{{- end -}}
 {{- $choices := list "personal" "work" -}}
 {{- $profile := promptChoiceOnce . "profile" "Profile to use" $choices -}}
 {{- $useStarshipPrompt := promptBoolOnce . "useStarshipPrompt" "Use starship prompt" -}}
@@ -21,8 +25,8 @@ encryption = "gpg"
 [data]
     email = {{ $email | quote  }}
     profile = {{ $profile | quote  }}
-    choices = {{ $choices | quote }}
     useGhostty = {{ $useGhostty }}
+    terminalFont = {{ $terminalFont }}
     useStarshipPrompt = {{ $useStarshipPrompt | quote }}
     haveSigningKey = {{ $haveSigningKey }}
     signingKey = {{ $signingKey | quote }}

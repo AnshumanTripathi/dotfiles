@@ -1,5 +1,5 @@
 {{- if .useGhostty }}
-font-size = 16
+font-size = {{ .terminalFont }}
 font-family = JetBrainsMono Nerd Font
 theme = Catppuccin Mocha
 {{- if eq .chezmoi.os "darwin" }}

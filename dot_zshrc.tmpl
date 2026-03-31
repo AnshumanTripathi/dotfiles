@@ -79,6 +79,10 @@ export PATH="/opt/homebrew/sbin:$PATH"
 # Aliases <<<
 alias lez='eza -F --icons -l -L2 --tree'
 alias ll='ls -larth'
+{{- if eq .chezmoi.os "linux" }}
+alias pbcopy="xclip -selection clipboard"
+alias pbpaste="xclip -selection clipboard -o"
+{{- end }}
 # >>>
 
 # Shell Config <<<
