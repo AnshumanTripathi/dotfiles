@@ -43,6 +43,7 @@ chezmoi execute-template < file  # Test template rendering
 | [.chezmoiscripts/](.chezmoiscripts/) | Install/setup scripts (`run_before_*`, `run_once_*`, `run_onchange_*`) |
 | [bin/](.chezmoiscripts/) | User scripts deployed to `~/bin/` |
 | [docs/linux-backups.md](docs/linux-backups.md) | Backup architecture, restore, troubleshooting |
+| [docs/linux-screenshots.md](docs/linux-screenshots.md) | Screenshot setup for GNOME Wayland (XDG portal + ksnip) |
 
 ## Naming Conventions
 

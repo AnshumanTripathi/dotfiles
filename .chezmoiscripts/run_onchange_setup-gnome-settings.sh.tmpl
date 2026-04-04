@@ -5,4 +5,18 @@ if command -v gsettings &>/dev/null; then
     # shifting input focus (disable-while-typing alone has gaps between keystrokes)
     gsettings set org.gnome.desktop.peripherals.touchpad tap-to-click false
 fi
+
+{{ if eq .profile "personal" -}}
+# Custom keyboard shortcuts (personal + GNOME only)
+# Screenshot: calls XDG portal → GNOME screenshot UI → ksnip for annotation
+# (flameshot/ksnip direct capture blocked by GNOME 46+ portal security)
+if command -v dconf &>/dev/null && command -v gnome-shell &>/dev/null; then
+    BASE=/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings
+    dconf write ${BASE}/custom0/name     "'Screenshot'"
+    dconf write ${BASE}/custom0/command  "'/home/anshuman/bin/screenshot'"
+    dconf write ${BASE}/custom0/binding  "'<Shift><Control>4'"
+    dconf write /org/gnome/settings-daemon/plugins/media-keys/custom-keybindings \
+        "['/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom0/']"
+fi
+{{- end }}
 {{- end }}

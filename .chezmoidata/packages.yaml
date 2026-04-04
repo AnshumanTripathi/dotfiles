@@ -116,6 +116,7 @@ packages:
         packages:
           - github-cli
           - keyd
+          - ksnip
           - nmap
           - tailscale
         aur: []

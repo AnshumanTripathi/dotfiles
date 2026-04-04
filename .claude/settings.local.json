@@ -6,7 +6,9 @@
       "Bash(pacman -Ss btrbk)",
       "Bash(pacman -Ss restic)",
       "Bash(pacman -Si btrbk)",
-      "Bash(yay -Si btrbk)"
+      "Bash(yay -Si btrbk)",
+      "Bash(pacman -Q pipewire wireplumber pipewire-pulse gst-plugin-pipewire)",
+      "Bash(systemctl --user status pipewire pipewire-pulse wireplumber)"
     ]
   }
 }

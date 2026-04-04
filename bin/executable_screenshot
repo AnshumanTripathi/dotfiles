@@ -1,0 +1,51 @@
+#!/usr/bin/python3
+"""
+Screenshot helper for GNOME Wayland.
+
+Calls the XDG Screenshot portal (which invokes GNOME's native screenshot UI),
+then opens the result in ksnip for annotation.
+
+Usage: screenshot
+Set as a GNOME keyboard shortcut: Settings → Keyboard → Custom Shortcuts
+"""
+import gi
+gi.require_version('Gtk', '4.0')
+from gi.repository import GLib
+import dbus
+import dbus.mainloop.glib
+import sys
+import subprocess
+import random
+import string
+
+dbus.mainloop.glib.DBusGMainLoop(set_as_default=True)
+bus = dbus.SessionBus()
+portal = bus.get_object('org.freedesktop.portal.Desktop', '/org/freedesktop/portal/desktop')
+iface = dbus.Interface(portal, 'org.freedesktop.portal.Screenshot')
+
+token = 'ss_' + ''.join(random.choices(string.ascii_lowercase, k=6))
+loop = GLib.MainLoop()
+result_uri = [None]
+
+
+def on_response(response, results):
+    if response == 0 and 'uri' in results:
+        result_uri[0] = str(results['uri'])
+    loop.quit()
+
+
+options = dbus.Dictionary(
+    {'handle_token': token, 'interactive': dbus.Boolean(True)},
+    signature='sv'
+)
+request_path = iface.Screenshot('', options)
+bus.get_object('org.freedesktop.portal.Desktop', request_path).connect_to_signal('Response', on_response)
+
+GLib.timeout_add_seconds(60, loop.quit)
+loop.run()
+
+if result_uri[0]:
+    path = result_uri[0].replace('file://', '')
+    subprocess.Popen(['ksnip', '-e', path])
+else:
+    sys.exit(1)
