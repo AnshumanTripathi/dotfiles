@@ -1,0 +1,86 @@
+#!/bin/bash
+{{ if eq .chezmoi.os "linux" -}}
+set -euo pipefail
+
+echo "#############################################"
+echo "Setting up backup infrastructure (btrbk + restic)"
+echo "#############################################"
+
+# ── btrbk config ──
+sudo mkdir -p /etc/btrbk
+sudo tee /etc/btrbk/btrbk.conf > /dev/null << 'BTRBK_EOF'
+# btrbk configuration for automated Btrfs snapshots
+# Managed by chezmoi — do not edit manually
+
+timestamp_format    long
+
+snapshot_preserve_min   latest
+snapshot_preserve       24h 7d 4w 6m
+
+volume /
+  snapshot_dir          /.snapshots
+
+  subvolume /
+    snapshot_name       root
+
+  subvolume /home
+    snapshot_name       home
+BTRBK_EOF
+
+echo "Installed /etc/btrbk/btrbk.conf"
+
+# ── restic-backup systemd user service ──
+SYSTEMD_USER_DIR="$HOME/.config/systemd/user"
+mkdir -p "$SYSTEMD_USER_DIR"
+
+cat > "$SYSTEMD_USER_DIR/restic-backup.service" << 'SVC_EOF'
+[Unit]
+Description=Restic backup to NAS
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=oneshot
+ExecStart=%h/bin/restic-backup.sh
+Nice=19
+IOSchedulingClass=idle
+SVC_EOF
+
+echo "Installed restic-backup.service (user unit)"
+
+# ── restic-backup systemd user timer ──
+cat > "$SYSTEMD_USER_DIR/restic-backup.timer" << 'TMR_EOF'
+[Unit]
+Description=Daily restic backup to NAS
+
+[Timer]
+OnCalendar=daily
+RandomizedDelaySec=1800
+Persistent=true
+
+[Install]
+WantedBy=timers.target
+TMR_EOF
+
+echo "Installed restic-backup.timer (user unit)"
+
+# ── Enable timers ──
+# btrbk ships its own system-level timer (runs as root for snapshot creation)
+sudo systemctl daemon-reload
+sudo systemctl enable btrbk.timer
+echo "Enabled btrbk.timer (hourly Btrfs snapshots)"
+
+# restic runs as user service (needs gopass access)
+systemctl --user daemon-reload
+systemctl --user enable restic-backup.timer
+echo "Enabled restic-backup.timer (daily NAS backups)"
+
+echo ""
+echo "Backup infrastructure configured:"
+echo "  btrbk  → hourly local Btrfs snapshots (systemd system timer)"
+echo "  restic → daily encrypted NAS backups  (systemd user timer)"
+echo ""
+echo "Start timers now with:"
+echo "  sudo systemctl start btrbk.timer"
+echo "  systemctl --user start restic-backup.timer"
+{{ end -}}

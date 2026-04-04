@@ -13,6 +13,7 @@ packages:
         - kubie
         # shell processing
         - bash # Updated shell
+        - ripgrep
         - jq
         - yq
         - bat
@@ -75,6 +76,7 @@ packages:
         - kubectl
         - k9s
         # Shell processing
+        - ripgrep
         - jq
         - yq
         - bat
@@ -95,6 +97,9 @@ packages:
         - ghostty
         # utilities
         - xclip
+        # backup
+        - btrbk
+        - restic
       aur:
         - asdf-vm
         - kubecm

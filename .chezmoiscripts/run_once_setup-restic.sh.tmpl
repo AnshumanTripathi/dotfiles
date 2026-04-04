@@ -1,0 +1,28 @@
+#!/bin/bash
+{{ if eq .chezmoi.os "linux" -}}
+set -euo pipefail
+
+echo "#############################################"
+echo "Setting up restic backup password in gopass"
+echo "#############################################"
+
+# Only create if the gopass entry doesn't already exist
+if ! gopass show backup/restic &>/dev/null 2>&1; then
+    PASSWORD=$(openssl rand -base64 32)
+    echo "$PASSWORD" | gopass insert -f backup/restic
+
+    echo ""
+    echo "Restic password has been stored in gopass at 'backup/restic'"
+    echo "IMPORTANT: Ensure your gopass store is synced/backed up independently!"
+else
+    echo "gopass entry 'backup/restic' already exists, skipping"
+fi
+
+# Create NAS backup directory if reachable
+if mountpoint -q /mnt/nas 2>/dev/null || ls /mnt/nas/ &>/dev/null 2>&1; then
+    mkdir -p /mnt/nas/backups
+    echo "Created /mnt/nas/backups/ directory"
+else
+    echo "NAS not available — /mnt/nas/backups/ will be created on first backup run"
+fi
+{{ end -}}
