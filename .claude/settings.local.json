@@ -1,7 +1,12 @@
 {
   "permissions": {
     "allow": [
-      "Bash(chezmoi diff:*)"
+      "Bash(chezmoi diff:*)",
+      "Bash(chezmoi apply:*)",
+      "Bash(pacman -Ss btrbk)",
+      "Bash(pacman -Ss restic)",
+      "Bash(pacman -Si btrbk)",
+      "Bash(yay -Si btrbk)"
     ]
   }
 }
