@@ -9,7 +9,7 @@ LOG_FILE="$HOME/.local/log/restic-backup.log"
 LOCK_FILE="/tmp/restic-backup.lock"
 
 export RESTIC_REPOSITORY
-export RESTIC_PASSWORD_COMMAND="gopass show -o backup/restic"
+export RESTIC_PASSWORD_COMMAND="gopass show -o arch/backup/restic"
 
 # ── Logging ──
 log() {
@@ -28,8 +28,8 @@ fi
 # ── Pre-flight checks ──
 
 # Verify gopass can retrieve the password
-if ! gopass show -o backup/restic &>/dev/null; then
-    log "ERROR: Cannot retrieve restic password from gopass (backup/restic)"
+if ! gopass show -o arch/backup/restic &>/dev/null; then
+    log "ERROR: Cannot retrieve restic password from gopass (arch/backup/restic)"
     exit 1
 fi
 

@@ -53,14 +53,14 @@ Both are scheduled via systemd timers with `Persistent=true`, so missed backups 
 
 ## Password Management
 
-The restic repository password is stored in **gopass** at `backup/restic`.
+The restic repository password is stored in **gopass** at `arch/backup/restic`.
 
 ```bash
 # View the password
-gopass show backup/restic
+gopass show arch/backup/restic
 
 # The backup script retrieves it automatically via:
-export RESTIC_PASSWORD_COMMAND="gopass show -o backup/restic"
+export RESTIC_PASSWORD_COMMAND="gopass show -o arch/backup/restic"
 ```
 
 The password is generated automatically on first `chezmoi apply` by `run_once_setup-restic.sh.tmpl`. Ensure your gopass store is synced or backed up independently (it is GPG-encrypted).
@@ -115,19 +115,19 @@ ls -la /.snapshots/
 ### List restic snapshots on NAS
 ```bash
 restic -r /mnt/nas/backups/restic-$(cat /etc/hostname) \
-    -p <(gopass show -o backup/restic) snapshots
+    -p <(gopass show -o arch/backup/restic) snapshots
 ```
 
 ### Browse files in a restic snapshot
 ```bash
 # List files in the latest snapshot
 restic -r /mnt/nas/backups/restic-$(cat /etc/hostname) \
-    -p <(gopass show -o backup/restic) ls latest
+    -p <(gopass show -o arch/backup/restic) ls latest
 
 # Mount snapshots as a FUSE filesystem for browsing
 mkdir -p /tmp/restic-mount
 restic -r /mnt/nas/backups/restic-$(cat /etc/hostname) \
-    -p <(gopass show -o backup/restic) mount /tmp/restic-mount
+    -p <(gopass show -o arch/backup/restic) mount /tmp/restic-mount
 # Browse at /tmp/restic-mount/snapshots/<id>/
 # Ctrl+C to unmount
 ```
@@ -151,13 +151,13 @@ cp /.snapshots/home.20260403T1200/anshuman/path/to/file ~/path/to/file
 ```bash
 # Restore a specific file from the latest snapshot
 restic -r /mnt/nas/backups/restic-$(cat /etc/hostname) \
-    -p <(gopass show -o backup/restic) \
+    -p <(gopass show -o arch/backup/restic) \
     restore latest --target /tmp/restic-restore \
     --include /home/anshuman/path/to/file
 
 # Restore from a specific snapshot ID
 restic -r /mnt/nas/backups/restic-$(cat /etc/hostname) \
-    -p <(gopass show -o backup/restic) \
+    -p <(gopass show -o arch/backup/restic) \
     restore abc123 --target /tmp/restic-restore
 ```
 
@@ -166,7 +166,7 @@ restic -r /mnt/nas/backups/restic-$(cat /etc/hostname) \
 ```bash
 # Restore to a temporary location first, then copy
 restic -r /mnt/nas/backups/restic-$(cat /etc/hostname) \
-    -p <(gopass show -o backup/restic) \
+    -p <(gopass show -o arch/backup/restic) \
     restore latest --target /tmp/restic-restore \
     --include /home/anshuman
 ```
@@ -183,7 +183,7 @@ Full system recovery from scratch:
 6. **Restore home data**:
    ```bash
    restic -r /mnt/nas/backups/restic-$(cat /etc/hostname) \
-       -p <(gopass show -o backup/restic) \
+       -p <(gopass show -o arch/backup/restic) \
        restore latest --target /
    ```
 7. **Restore /etc customizations** selectively from the restic backup
@@ -222,7 +222,7 @@ journalctl -u btrbk.service --since "7 days ago" --no-pager
 ```bash
 # List recent restic snapshots on NAS — look for recent dates
 restic -r /mnt/nas/backups/restic-$(cat /etc/hostname) \
-    -p <(gopass show -o backup/restic) snapshots --latest 5
+    -p <(gopass show -o arch/backup/restic) snapshots --latest 5
 
 # Check the backup log for errors or SKIP messages
 tail -100 ~/.local/log/restic-backup.log
@@ -238,11 +238,11 @@ grep -E 'SKIP|ERROR' ~/.local/log/restic-backup.log | tail -20
 ```bash
 # Quick check (metadata only)
 restic -r /mnt/nas/backups/restic-$(cat /etc/hostname) \
-    -p <(gopass show -o backup/restic) check
+    -p <(gopass show -o arch/backup/restic) check
 
 # Full check (reads all data — slow, use occasionally)
 restic -r /mnt/nas/backups/restic-$(cat /etc/hostname) \
-    -p <(gopass show -o backup/restic) check --read-data
+    -p <(gopass show -o arch/backup/restic) check --read-data
 ```
 
 ### NAS mount not triggering (automount dead)
@@ -291,7 +291,7 @@ mountpoint /mnt/nas       # Is the CIFS mount active?
 If a backup was interrupted (e.g., laptop suspended mid-backup), restic may leave a stale lock:
 ```bash
 restic -r /mnt/nas/backups/restic-$(cat /etc/hostname) \
-    -p <(gopass show -o backup/restic) unlock
+    -p <(gopass show -o arch/backup/restic) unlock
 ```
 
 ### btrbk snapshot failures

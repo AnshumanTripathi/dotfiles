@@ -91,7 +91,7 @@ Two-layer backup strategy for Arch Linux with Btrfs:
 - **btrbk**: Hourly local Btrfs snapshots of root and home to `/.snapshots/` via systemd system timer
 - **restic**: Daily encrypted, deduplicated backups to NAS (`/mnt/nas/backups/restic-<hostname>`) over Tailscale CIFS via systemd user timer
 
-Restic password is auto-generated in gopass (`backup/restic`) on first apply. Both timers use `Persistent=true` so missed runs fire on next wake.
+Restic password is auto-generated in gopass (`arch/backup/restic`) on first apply. Both timers use `Persistent=true` so missed runs fire on next wake.
 
 See [docs/linux-backups.md](docs/linux-backups.md) for retention policies, restore procedures, disaster recovery, and troubleshooting.
 
