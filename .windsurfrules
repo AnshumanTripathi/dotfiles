@@ -4,7 +4,9 @@ This file provides guidance to Windsurf Cascade when working with code in this r
 
 ## AI Agent Config Sync
 
-This repo is used with both Claude Code and Windsurf. Their project instruction files and skills must stay in sync:
+Only apply these sync rules if the **project-local rules file explicitly mentions AI Agent Config Sync**, or if a **`.windsurf/` directory is detected** in the project root.
+
+**Exception**: The chezmoi dotfiles repo (`~/.local/share/chezmoi`) manages `~/CLAUDE.md` — its local rules include the sync rules below, so they apply there:
 - **.windsurfrules** <-> **CLAUDE.md**: When modifying project instructions in either file, replicate the change to the other.
 - **.windsurf/skills/** <-> **.claude/skills/**: When adding, modifying, or removing a skill in either directory, replicate the change to the other. Adapt frontmatter fields to match each tool's format.
 
