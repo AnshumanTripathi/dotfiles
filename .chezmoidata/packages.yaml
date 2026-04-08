@@ -59,6 +59,7 @@ packages:
           - snyk/tap/snyk
           - direnv
           - istioctl
+          - maven
         casks:
           - redis
 
