@@ -118,6 +118,7 @@ packages:
           - github-cli
           - keyd
           - ksnip
+          - libreoffice-still
           - nmap
           - tailscale
         aur: []
