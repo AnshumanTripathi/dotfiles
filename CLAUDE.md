@@ -28,6 +28,7 @@ chezmoi execute-template < file  # Test template rendering
 
 ## When Modifying
 
+- `~/.claude/CLAUDE.md` (source: `private_dot_claude/CLAUDE.md`) is the true global Claude Code config and is **always deployed unconditionally**. This `CLAUDE.md` file is chezmoi repo-specific and is excluded from deployment via `.chezmoiignore`. Only `~/.claude/settings.json` is conditionally deployed (when `aiAgent == "claude-code"`).
 - To add a package: edit [.chezmoidata/packages.yaml](.chezmoidata/packages.yaml) under the appropriate package manager key (`brew`/`pacman`) and tier. For cross-platform tools (asdf, npm, wget), add under `common`
 - To add shell config: edit [dot_zshrc.tmpl](dot_zshrc.tmpl), wrapping profile-specific blocks in `{{- if eq .profile "work" }}` / `{{- end }}` and OS-specific blocks in `{{- if eq .chezmoi.os "darwin" }}` / `{{- end }}`
 - To add a new managed config file: use `chezmoi add` or manually create with correct chezmoi naming prefixes

@@ -8,7 +8,12 @@
       "Bash(pacman -Si btrbk)",
       "Bash(yay -Si btrbk)",
       "Bash(pacman -Q pipewire wireplumber pipewire-pulse gst-plugin-pipewire)",
-      "Bash(systemctl --user status pipewire pipewire-pulse wireplumber)"
+      "Bash(systemctl --user status pipewire pipewire-pulse wireplumber)",
+      "Bash(rtk ls:*)",
+      "Bash(rtk grep:*)",
+      "Bash(rtk find:*)",
+      "Bash(chezmoi managed:*)",
+      "Bash(rtk read:*)"
     ]
   }
 }
