@@ -112,7 +112,11 @@ source /usr/share/zsh/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zs
 # Load z directory jumper
 eval "$(zoxide init zsh)"
 
+{{- if and (eq .profile "work") (eq .aiAgent "windsurf") }}
+EDITOR=surf
+{{- else }}
 EDITOR=code
+{{- end }}
 
 {{- if .useStarshipPrompt }}
 # enable starship

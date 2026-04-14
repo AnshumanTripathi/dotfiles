@@ -60,6 +60,7 @@ packages:
           - direnv
           - istioctl
           - maven
+          - gemini-cli
         casks:
           - redis
 
