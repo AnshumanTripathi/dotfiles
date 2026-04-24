@@ -40,6 +40,7 @@ packages:
       casks:
         - font-jetbrains-mono-nerd-font
         - ghostty
+        - headlamp
     profiles:
       personal:
         taps: []
@@ -108,6 +109,7 @@ packages:
         - asdf-vm
         - kubecm
         - kubie
+        - headlamp-bin
         - krew-bin
         - pyenv-virtualenv
         - ttf-jetbrains-mono-nerd
@@ -121,6 +123,8 @@ packages:
           - ksnip
           - libreoffice-still
           - nmap
+          - noto-fonts
+          - noto-fonts-emoji
           - tailscale
         aur: []
       work:
@@ -154,6 +158,8 @@ packages:
           plugin: https://github.com/elementalvoid/asdf-eksctl.git
         - name: nodejs
           plugin: https://github.com/asdf-vm/asdf-nodejs.git
+        - name: terraform
+          plugin: https://github.com/asdf-community/asdf-hashicorp.git
     profiles:
       personal:
         asdf:
