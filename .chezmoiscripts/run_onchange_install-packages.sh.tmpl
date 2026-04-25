@@ -96,6 +96,159 @@ yay -S --needed --noconfirm \
 {{ end }}
 {{ end -}}
 
+{{ if .installContainerTools -}}
+echo "#############################################"
+echo ""
+echo "Installing container tools"
+echo ""
+
+{{ if eq $os "darwin" -}}
+brew bundle --file=/dev/stdin <<EOF
+{{ range .packages.brew.container.formulae -}}
+brew {{ . | quote }}
+{{ end -}}
+{{ range .packages.brew.container.casks -}}
+cask {{ . | quote }}
+{{ end -}}
+EOF
+{{ else if eq $os "linux" -}}
+sudo pacman -S --needed --noconfirm \
+{{ range .packages.pacman.container.packages }}  {{ . }} \
+{{ end }}
+
+yay -S --needed --noconfirm \
+{{ range .packages.pacman.container.aur }}  {{ . }} \
+{{ end }}
+{{ end -}}
+
+{{ range .packages.common.container.asdf -}}
+  echo "Adding asdf plugin {{ .name }}"
+  asdf plugin add {{ .name }} {{ .plugin }}
+  asdf install {{ .name }} latest
+  asdf set -u {{ .name }} latest
+{{ end -}}
+
+{{ if eq $os "darwin" -}}
+{{ range .packages.common.container.wgets.darwin -}}
+TEMP_DIR=$(mktemp -d)
+echo "Fetching {{ .name }}"
+  {{ if .tar -}}
+    wget {{ .url }} -O - | tar -xz -C "$TEMP_DIR"
+  {{ else -}}
+    wget {{ .url }} -O $TEMP_DIR/{{ .name }}
+  {{ end -}}
+  mv "$TEMP_DIR"/{{ .name }} "$HOME/bin/"
+  chmod +x "$HOME/bin/{{ .name }}"
+{{ end -}}
+{{ else if eq $os "linux" -}}
+{{ range .packages.common.container.wgets.linux -}}
+TEMP_DIR=$(mktemp -d)
+echo "Fetching {{ .name }}"
+  {{ if .tar -}}
+    wget {{ .url }} -O - | tar -xz -C "$TEMP_DIR"
+  {{ else -}}
+    wget {{ .url }} -O $TEMP_DIR/{{ .name }}
+  {{ end -}}
+  mv "$TEMP_DIR"/{{ .name }} "$HOME/bin/"
+  chmod +x "$HOME/bin/{{ .name }}"
+{{ end -}}
+{{ end -}}
+{{ end -}}{{/* if .installContainerTools */}}
+
+{{ if .installInfraTools -}}
+echo "#############################################"
+echo ""
+echo "Installing infra tools"
+echo ""
+
+{{ if eq $os "darwin" -}}
+brew bundle --file=/dev/stdin <<EOF
+{{ range .packages.brew.infra.formulae -}}
+brew {{ . | quote }}
+{{ end -}}
+EOF
+{{ else if eq $os "linux" -}}
+sudo pacman -S --needed --noconfirm \
+{{ range .packages.pacman.infra.packages }}  {{ . }} \
+{{ end }}
+{{ end -}}
+
+{{ range .packages.common.infra.asdf -}}
+  echo "Adding asdf plugin {{ .name }}"
+  asdf plugin add {{ .name }} {{ .plugin }}
+  asdf install {{ .name }} latest
+  asdf set -u {{ .name }} latest
+{{ end -}}
+{{ end -}}{{/* if .installInfraTools */}}
+
+{{ if .installSecurityTools -}}
+echo "#############################################"
+echo ""
+echo "Installing security tools"
+echo ""
+
+{{ if eq $os "darwin" -}}
+brew bundle --file=/dev/stdin <<EOF
+{{ range .packages.brew.security.taps -}}
+tap {{ . | quote }}
+{{ end -}}
+{{ range .packages.brew.security.formulae -}}
+brew {{ . | quote }}
+{{ end -}}
+EOF
+{{ else if eq $os "linux" -}}
+sudo pacman -S --needed --noconfirm \
+{{ range .packages.pacman.security.packages }}  {{ . }} \
+{{ end }}
+
+yay -S --needed --noconfirm \
+{{ range .packages.pacman.security.aur }}  {{ . }} \
+{{ end }}
+{{ end -}}
+{{ end -}}{{/* if .installSecurityTools */}}
+
+{{ if .installPythonTools -}}
+echo "#############################################"
+echo ""
+echo "Installing Python tools"
+echo ""
+
+{{ if eq $os "darwin" -}}
+brew bundle --file=/dev/stdin <<EOF
+{{ range .packages.brew.python.formulae -}}
+brew {{ . | quote }}
+{{ end -}}
+EOF
+{{ else if eq $os "linux" -}}
+sudo pacman -S --needed --noconfirm \
+{{ range .packages.pacman.python.packages }}  {{ . }} \
+{{ end }}
+
+yay -S --needed --noconfirm \
+{{ range .packages.pacman.python.aur }}  {{ . }} \
+{{ end }}
+{{ end -}}
+{{ end -}}{{/* if .installPythonTools */}}
+
+{{ if .installBackupTools -}}
+echo "#############################################"
+echo ""
+echo "Installing backup tools"
+echo ""
+
+{{ if eq $os "darwin" -}}
+brew bundle --file=/dev/stdin <<EOF
+{{ range .packages.brew.backup.formulae -}}
+brew {{ . | quote }}
+{{ end -}}
+EOF
+{{ else if eq $os "linux" -}}
+sudo pacman -S --needed --noconfirm \
+{{ range .packages.pacman.backup.packages }}  {{ . }} \
+{{ end }}
+{{ end -}}
+{{ end -}}{{/* if .installBackupTools */}}
+
 echo "#############################################"
 echo ""
 echo "Installing shared packages using wget"

@@ -18,6 +18,11 @@
 {{-     $aiAgentChoices := list "windsurf" "claude-code" -}}
 {{-     $aiAgent = promptChoiceOnce . "aiAgent" "AI agent" $aiAgentChoices }}
 {{- end }}
+{{- $installContainerTools := promptBoolOnce . "installContainerTools" "Install container tools (kubernetes, helm, dive, etc)" -}}
+{{- $installInfraTools := promptBoolOnce . "installInfraTools" "Install infra tools (ansible, terraform, direnv)" -}}
+{{- $installSecurityTools := promptBoolOnce . "installSecurityTools" "Install security tools (nmap, wireshark, snyk)" -}}
+{{- $installPythonTools := promptBoolOnce . "installPythonTools" "Install Python tools (pyenv, pyenv-virtualenv)" -}}
+{{- $installBackupTools := promptBoolOnce . "installBackupTools" "Install backup tools (restic, btrbk)" -}}
 encryption = "gpg"
 [gpg]
     args = ["--quiet"]
@@ -32,6 +37,11 @@ encryption = "gpg"
     signingKey = {{ $signingKey | quote }}
     useAIAgent = {{ $useAIAgent }}
     aiAgent = {{ $aiAgent | quote }}
+    installContainerTools = {{ $installContainerTools }}
+    installInfraTools = {{ $installInfraTools }}
+    installSecurityTools = {{ $installSecurityTools }}
+    installPythonTools = {{ $installPythonTools }}
+    installBackupTools = {{ $installBackupTools }}
 [edit]
     command = "code"
     args = ["--wait"]

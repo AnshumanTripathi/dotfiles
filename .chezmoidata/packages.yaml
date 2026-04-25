@@ -6,11 +6,6 @@ packages:
         - asdf
     shared:
       formulae:
-        - helm
-        - kubectl
-        - k9s
-        - kubecm
-        - kubie
         # shell processing
         - bash # Updated shell
         - ripgrep
@@ -23,43 +18,59 @@ packages:
         - gopass
         - fzf
         - fd
-        - mtr
         - zsh-syntax-highlighting
         - starship
         - zoxide
-        - krew
         - pinentry-mac
-        - dive
-        # development
-        - ansible
-        - pyenv
-        - pyenv-virtualenv
-        - nmap
         - rtk
       taps: []
       casks:
         - font-jetbrains-mono-nerd-font
         - ghostty
+    container:
+      formulae:
+        - helm
+        - kubectl
+        - k9s
+        - kubecm
+        - kubie
+        - krew
+        - dive
+        - kubeseal
+        - operator-sdk
+        - istioctl
+      casks:
         - headlamp
+    infra:
+      formulae:
+        - ansible
+        - direnv
+    security:
+      taps:
+        - snyk/tap
+      formulae:
+        - nmap
+        - mtr
+        - wireshark
+        - snyk/tap/snyk
+    python:
+      formulae:
+        - pyenv
+        - pyenv-virtualenv
+    backup:
+      formulae:
+        - restic
     profiles:
       personal:
         taps: []
         formulae:
           - gh
-          - nmap
           - tailscale
         casks: []
       work:
         taps:
           - redis/redis
-          - snyk/tap
         formulae:
-          - kubeseal
-          - wireshark
-          - operator-sdk
-          - snyk/tap/snyk
-          - direnv
-          - istioctl
           - maven
           - gemini-cli
         casks:
@@ -75,10 +86,6 @@ packages:
       aur: []
     shared:
       packages:
-        # Cloud 
-        - helm
-        - kubectl
-        - k9s
         # Shell processing
         - ripgrep
         - jq
@@ -89,32 +96,52 @@ packages:
         - gopass
         - fzf
         - fd
-        - mtr
         - zsh-syntax-highlighting
         - starship
         - zoxide
-        - dive
-        # Development
-        - ansible
-        - tk
-        - pyenv
-        - nmap
         - ghostty
         # utilities
         - xclip
-        # backup
-        - btrbk
-        - restic
       aur:
         - asdf-vm
+        - ttf-jetbrains-mono-nerd
+        - rtk
+        - zoom
+    container:
+      packages:
+        - helm
+        - kubectl
+        - k9s
+        - dive
+        - kubeseal
+      aur:
         - kubecm
         - kubie
         - headlamp-bin
         - krew-bin
+        - operator-sdk-bin
+    infra:
+      packages:
+        - ansible
+        - direnv
+      aur: []
+    security:
+      packages:
+        - nmap
+        - mtr
+        - wireshark-qt
+      aur:
+        - snyk
+    python:
+      packages:
+        - pyenv
+        - tk
+      aur:
         - pyenv-virtualenv
-        - ttf-jetbrains-mono-nerd
-        - rtk
-        - zoom
+    backup:
+      packages:
+        - btrbk
+        - restic
     profiles:
       personal:
         packages:
@@ -122,19 +149,13 @@ packages:
           - keyd
           - ksnip
           - libreoffice-still
-          - nmap
           - noto-fonts
           - noto-fonts-emoji
           - tailscale
         aur: []
       work:
-        packages:
-          - kubeseal
-          - wireshark-qt
-          - direnv
-        aur:
-          - operator-sdk-bin
-          - snyk
+        packages: []
+        aur: []
 
   # Future: just add a new key
   # apt:
@@ -146,18 +167,29 @@ packages:
   common:
     core:
       asdf: []
-      #   - name: nodejs
-      #     plugin: https://github.com/asdf-vm/asdf-nodejs.git
     shared:
       wgets: []
       npm: []
+      asdf:
+        - name: nodejs
+          plugin: https://github.com/asdf-vm/asdf-nodejs.git
+    container:
       asdf:
         - name: kubectl
           plugin: https://github.com/asdf-community/asdf-kubectl.git
         - name: eksctl
           plugin: https://github.com/elementalvoid/asdf-eksctl.git
-        - name: nodejs
-          plugin: https://github.com/asdf-vm/asdf-nodejs.git
+      wgets:
+        darwin:
+          - name: kubebuilder
+            url: https://github.com/kubernetes-sigs/kubebuilder/releases/latest/download/kubebuilder_darwin_arm64
+            tar: false
+        linux:
+          - name: kubebuilder
+            url: https://github.com/kubernetes-sigs/kubebuilder/releases/latest/download/kubebuilder_linux_amd64
+            tar: false
+    infra:
+      asdf:
         - name: terraform
           plugin: https://github.com/asdf-community/asdf-hashicorp.git
     profiles:
@@ -184,12 +216,6 @@ packages:
       work:
         asdf: []
         wgets:
-          darwin:
-            - name: kubebuilder
-              url: https://github.com/kubernetes-sigs/kubebuilder/releases/latest/download/kubebuilder_darwin_arm64
-              tar: false
-          linux:
-            - name: kubebuilder
-              url: https://github.com/kubernetes-sigs/kubebuilder/releases/latest/download/kubebuilder_linux_amd64
-              tar: false
+          darwin: []
+          linux: []
         npm: []
