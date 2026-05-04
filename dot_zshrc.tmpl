@@ -183,7 +183,7 @@ if [ -f "$HOME/gcloud/completion.zsh.inc" ]; then . "$HOME/gcloud/completion.zsh
 
 export PYENV_ROOT="$HOME/.pyenv"
 [[ -d $PYENV_ROOT/bin ]] && export PATH="$PYENV_ROOT/bin:$PATH"
-eval "$(pyenv init -)"
+eval "$(pyenv init - --no-rehash)"
 eval "$(pyenv virtualenv-init -)"
 
 # >>>
