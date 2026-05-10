@@ -65,6 +65,7 @@ packages:
         taps: []
         formulae:
           - gh
+          - syncthing
           - tailscale
         casks: []
       work:
@@ -151,6 +152,7 @@ packages:
           - libreoffice-still
           - noto-fonts
           - noto-fonts-emoji
+          - syncthing
           - tailscale
         aur: []
       work:
