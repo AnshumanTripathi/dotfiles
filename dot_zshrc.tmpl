@@ -232,6 +232,59 @@ function rename_kube_context() {
   fi
 }
 
+kubectl() {
+  # Only wrap in interactive shells
+  [[ -o interactive ]] || { command kubectl "$@"; return $?; }
+
+  # If bat isn't installed, just run kubectl normally
+  command -v bat >/dev/null 2>&1 || { command kubectl "$@"; return $?; }
+
+  # If not interactive output, don't page
+  [ -t 1 ] || { command kubectl "$@"; return $?; }
+
+  # Don't interfere with streaming modes
+  for a in "$@"; do
+    case "$a" in
+      -w|--watch|--watch-only|-f|--follow) command kubectl "$@"; return $? ;;
+    esac
+  done
+
+  # Detect output format
+  local fmt="" arg=""
+  local bat_paging="${KUBECTL_BAT_PAGING:-auto}"
+  local i=1
+  while [ $i -le $# ]; do
+    eval "arg=\${$i}"
+    case "$arg" in
+      -o)
+        i=$((i+1))
+        [ $i -le $# ] && eval "fmt=\${$i}"
+        ;;
+      -o=*) fmt="${arg#-o=}" ;;
+      -ojson) fmt="json" ;;
+      -oyaml) fmt="yaml" ;;
+      --output)
+        i=$((i+1))
+        [ $i -le $# ] && eval "fmt=\${$i}"
+        ;;
+      --output=*) fmt="${arg#--output=}" ;;
+    esac
+    i=$((i+1))
+  done
+
+  case "$fmt" in
+    json|yaml)
+      command kubectl "$@" 2> >(cat >&2) | bat --paging="$bat_paging" --style=plain -l "$fmt"
+      ;;
+    *)
+      command kubectl "$@" 2> >(cat >&2) | bat --paging="$bat_paging" --style=plain
+      ;;
+  esac
+
+  # Preserve kubectl exit code (bash/zsh)
+  return ${pipestatus[1]:-${PIPESTATUS[0]}}
+}
+
 # >>>
 
 # GO Configs <<<
