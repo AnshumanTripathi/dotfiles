@@ -23,6 +23,7 @@ packages:
         - zoxide
         - pinentry-mac
         - rtk
+        - thefuck
       taps: []
       casks:
         - font-jetbrains-mono-nerd-font
