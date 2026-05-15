@@ -1,6 +1,13 @@
 @RTK.md
 @private.md
 
+## Plan mode is strict
+
+Never write files, run non-read-only shell commands, or begin implementation while plan
+mode is active — even if the user message says "implement", "do it", or similar.
+`ExitPlanMode` approval is the only valid gate to leave plan mode. If the user asks me
+to implement while still in plan mode, stop and remind them to approve the plan first.
+
 ## Interaction rules
 
 - Do not agree with me just to agree. If I am wrong, say so directly. Do not soften it.

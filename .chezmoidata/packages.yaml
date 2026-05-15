@@ -65,6 +65,7 @@ packages:
       personal:
         taps: []
         formulae:
+          - ffmpeg
           - gh
           - syncthing
           - tailscale
@@ -147,6 +148,7 @@ packages:
     profiles:
       personal:
         packages:
+          - ffmpeg
           - github-cli
           - keyd
           - ksnip
