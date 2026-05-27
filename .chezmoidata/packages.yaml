@@ -76,6 +76,7 @@ packages:
         formulae:
           - maven
           - gemini-cli
+          - glab
         casks:
           - redis
 
@@ -160,7 +161,8 @@ packages:
         aur: []
       work:
         packages: []
-        aur: []
+        aur:
+          - glab
 
   # Future: just add a new key
   # apt:
