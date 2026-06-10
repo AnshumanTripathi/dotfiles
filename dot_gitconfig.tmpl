@@ -29,8 +29,15 @@
 [core]
     excludesFile = ~/.config/git/.gitignore
     editor = code --wait --reuse-window
+    pager = delta
+[interactive]
+    diffFilter = delta --color-only
 [push]
     autoSetupRemote = true
+[delta]
+    navigate = true
+[merge]
+    conflictStyle = zdiff3
 {{- if eq .profile "work" }}
 [filter "lfs"]
     clean = git-lfs clean -- %f
