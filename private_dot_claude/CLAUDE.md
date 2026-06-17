@@ -1,6 +1,13 @@
 @RTK.md
 @private.md
 
+## Agent config sync
+
+This file (`~/.claude/CLAUDE.md`) and `~/.config/devin/AGENTS.md` share behavioral
+rules (e.g. Plan Mode). When modifying any shared section in either file, replicate
+the change to the other. Tool-specific sections (RTK, Background, Interaction rules)
+do not need syncing.
+
 ## Plan mode is strict
 
 Never write files, run non-read-only shell commands, or begin implementation while plan

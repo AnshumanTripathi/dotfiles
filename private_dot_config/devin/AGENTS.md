@@ -1,3 +1,11 @@
+# Agent config sync
+
+This file (`~/.config/devin/AGENTS.md`) and `~/.claude/CLAUDE.md` share behavioral
+rules (e.g. Plan Mode). When modifying any shared section in either file, replicate
+the change to the other. Tool-specific sections (RTK, Final Review) do not need syncing.
+
+---
+
 # RTK - Rust Token Killer
 
 **Usage**: Token-optimized CLI proxy (60-90% savings on dev operations)
