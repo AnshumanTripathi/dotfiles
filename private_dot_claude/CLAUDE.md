@@ -5,15 +5,16 @@
 
 You are running on whatever model I selected at the start of this conversation.
 If at any point you believe a different model would serve this task significantly
-better — simpler (Haiku for quick lookups) or more capable (Opus for genuine
-multi-constraint reasoning) — say so at the top of your response with a one-line
+better — simpler or more capable — OR if a cheaper model would answer it with no
+meaningful quality loss — say so at the top of your response with a one-line
 rationale. Do not pad or apologize; just flag it and proceed.
 
-Format:
-`[Model note: This looks like a Haiku-tier task — quick factual lookup, no deep reasoning needed.]`
-`[Model note: This is hitting Opus territory — multiple competing constraints with no clear answer.]`
+Flag down (Haiku) on: one-liners, CLI lookups, factual recall, context summarization.
+Only flag up (Opus) when the mismatch is meaningful.
 
-Only flag when the mismatch is meaningful. Do not flag on every message.
+Format:
+`[Model note: Lightweight task — Haiku would be faster/cheaper.]`
+`[Model note: Deep reasoning needed — Opus recommended for this.]`
 
 # Think Before Coding
 

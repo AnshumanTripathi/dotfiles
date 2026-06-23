@@ -1,5 +1,6 @@
 README.md
 CLAUDE.md
 {{ if ne .aiAgent "claude-code" }}.claude/settings.json{{ end }}
+{{ if ne .aiAgent "windsurf" }}.codeium{{ end }}
 {{ if ne .profile "work" }}.config/devin/AGENTS.md{{ end }}
 docs/

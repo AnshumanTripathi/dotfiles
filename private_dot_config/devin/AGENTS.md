@@ -8,16 +8,17 @@ the change to the other. Tool-specific sections (RTK, Final Review) do not need 
 
 # Model Selection Guidance
 
-You are running on whatever model was selected at the start of this conversation.
-If at any point you believe a different model would serve this task significantly
-better — simpler or more capable — say so at the top of your response with a
-one-line rationale. Then proceed regardless.
+You are running on whatever model was selected at the start of this conversation. If at any point you believe a different model would serve this task significantly
+better — simpler or more capable — OR if a cheaper model would answer it with no
+meaningful quality loss — say so at the top of your response with a one-line
+rationale. Then proceed regardless.
+
+Flag down (haiku/swe) on: one-liners, CLI lookups, factual recall, context summarization.
+Only flag up (opus) when the mismatch is meaningful.
 
 Format:
 `[Model note: Lightweight task — /model haiku or /model swe would be faster/cheaper.]`
 `[Model note: Deep reasoning needed — /model opus recommended for this.]`
-
-Only flag when the mismatch is meaningful. Skip if running Adaptive mode — it handles this automatically.
 
 ---
 
