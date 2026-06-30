@@ -80,6 +80,7 @@ packages:
           - glab
           - sops
           - istioctl
+          - docker-credential-helper-ecr
         casks:
           - redis
 

@@ -73,7 +73,7 @@ PATH="$PATH:$HOME/.local/bin"
 {{- if eq .chezmoi.os "darwin" }}
 export PATH="/opt/homebrew/sbin:$PATH"
 {{- end }}
-
+PATH="/Users/anshumantripathi/.local/bin:$PATH"
 # >>>
 
 # Aliases <<<
@@ -94,7 +94,6 @@ autoload -U +X bashcompinit && bashcompinit
 complete -o nospace -C "$HOME/.asdf/shims/terragrunt" terragrunt
 
 # zsh-autosuggestion config
-zle_bracketed_paste=()
 ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE='fg=#3a3a3a'
 
 # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
