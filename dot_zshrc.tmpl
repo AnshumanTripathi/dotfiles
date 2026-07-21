@@ -83,9 +83,6 @@ alias ll='ls -larth'
 alias pbcopy="xclip -selection clipboard"
 alias pbpaste="xclip -selection clipboard -o"
 {{- end }}
-if command -v thefuck >/dev/null 2>&1; then
-  eval "$(thefuck --alias)"
-fi
 # >>>
 
 # Shell Config <<<
@@ -256,7 +253,9 @@ kubectl() {
   for a in "$@"; do
     case "$a" in
       -w|--watch|--watch-only|-f|--follow) command kubectl "$@"; return $? ;;
+      exec|port-forward|attach|debug) command kubectl "$@"; return $? ;;
     esac
+    
   done
 
   # Detect output format
