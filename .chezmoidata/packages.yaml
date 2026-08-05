@@ -24,6 +24,9 @@ packages:
         - zoxide
         - pinentry-mac
         - rtk
+        - nvim
+        - tree-sitter
+        - tree-sitter-cli
       taps: []
       casks:
         - font-jetbrains-mono-nerd-font
