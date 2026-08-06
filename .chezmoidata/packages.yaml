@@ -27,6 +27,7 @@ packages:
         - nvim
         - tree-sitter
         - tree-sitter-cli
+        - lazygit
       taps: []
       casks:
         - font-jetbrains-mono-nerd-font
