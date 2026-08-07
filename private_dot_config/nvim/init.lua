@@ -1,3 +1,5 @@
+vim.g.loaded_netrw = 1
+vim.g.loaded_netrwPlugin = 1
 -- Bootstrap lazy.nvim (auto-installs if missing)
 local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
 if not vim.loop.fs_stat(lazypath) then
@@ -65,9 +67,20 @@ vim.keymap.set({ "n", "t" }, "<C-j>", function()
   vim.cmd("startinsert")
 end, { desc = "Toggle terminal" })
 
+-- Tree toggle
+vim.keymap.set("n", "<leader>e", "<cmd>Neotree toggle<cr>", { desc = "Toggle file tree" })
+vim.keymap.set("n", "<leader>r", "<cmd>Neotree focus<cr>",  { desc = "Focus file tree" })
+
 -- Autoload
 vim.opt.autoread = true
 vim.api.nvim_create_autocmd({ "FocusGained", "BufEnter", "CursorHold" }, {
   pattern = "*",
   command = "checktime",
 })
+
+-- Autosave
+vim.api.nvim_create_autocmd({ "InsertLeave", "TextChanged" }, {
+  pattern = "*",
+  command = "silent! write",
+})
+

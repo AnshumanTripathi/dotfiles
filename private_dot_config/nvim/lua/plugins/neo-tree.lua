@@ -10,10 +10,14 @@ return {
   keys = {
     { "<leader>e", "<cmd>Neotree toggle<cr>", desc = "Toggle file explorer" },
   },
+
   opts = {
     filesystem = {
-      follow_current_file = { enabled = true },  -- auto-reveals current file
+      follow_current_file = { enabled = true },
       hijack_netrw_behavior = "open_current",
+      cwd_target = {
+        sidebar = "tab",   -- sidebar follows tab's cwd
+      },
     },
   },
 }
