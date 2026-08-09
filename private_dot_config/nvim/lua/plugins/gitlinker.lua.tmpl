@@ -3,10 +3,12 @@ return {
   dependencies = { "nvim-lua/plenary.nvim" },
   config = function()
     require("gitlinker").setup({
+{{- if eq .profile "work" }}
       callbacks = {
         ["gitlab.corp.zscaler.com"] = require("gitlinker.hosts").get_gitlab_type_url,
       },
-      action_callback = require("gitlinker.actions").open_in_browser, -- opens in browser instead of copying
+{{- end }}
+      action_callback = require("gitlinker.actions").open_in_browser,
       mappings = "<leader>gy",
     })
   end,

@@ -111,6 +111,10 @@ packages:
         - starship
         - zoxide
         - ghostty
+        # neovim + dependencies
+        - neovim
+        - tree-sitter
+        - lazygit
         # utilities
         - xclip
       aur:
