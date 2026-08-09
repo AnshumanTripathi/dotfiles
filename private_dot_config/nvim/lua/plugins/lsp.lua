@@ -7,23 +7,18 @@ return {
     },
     config = function()
       require("mason").setup()
-      require("mason-lspconfig").setup({
-        ensure_installed = { "lua_ls", "ts_ls" },  -- add more as needed
-        automatic_installation = true,
-      })
-      require("mason-lspconfig").setup({
-        ensure_installed = { "lua_ls", "ts_ls", "gopls" },
-        automatic_installation = true,
-      })
 
       local lspconfig = require("lspconfig")
 
-      -- ✅ New API: handlers table passed directly to setup()
       require("mason-lspconfig").setup({
+        ensure_installed = { "lua_ls", "ts_ls", "gopls" },
+        automatic_installation = true,
         handlers = {
           -- Default handler — runs for every installed server
           function(server_name)
-            lspconfig[server_name].setup({})
+            lspconfig[server_name].setup({
+              capabilities = require("cmp_nvim_lsp").default_capabilities(),
+            })
           end,
 
           -- Per-server overrides go here, e.g.:

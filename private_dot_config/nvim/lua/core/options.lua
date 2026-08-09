@@ -7,3 +7,5 @@ vim.opt.expandtab = true        -- Spaces instead of tabs
 vim.opt.termguicolors = true    -- Full color support
 vim.opt.wrap = false            -- No line wrapping
 vim.opt.clipboard = "unnamedplus" -- Use system clipboard
+vim.opt.splitbelow = true       -- Horizontal splits always go below
+vim.opt.splitright = true       -- Vertical splits always go right
