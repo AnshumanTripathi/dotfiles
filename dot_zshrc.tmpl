@@ -114,7 +114,7 @@ eval "$(zoxide init zsh)"
 {{- if and (eq .profile "work") (eq .aiAgent "windsurf") }}
 EDITOR=surf
 {{- else }}
-EDITOR=code
+EDITOR=nvim
 {{- end }}
 
 {{- if .useStarshipPrompt }}
