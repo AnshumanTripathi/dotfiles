@@ -111,6 +111,7 @@ packages:
         - starship
         - zoxide
         - ghostty
+        - git-delta
         # neovim + dependencies
         - neovim
         - tree-sitter
