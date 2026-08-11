@@ -8,6 +8,7 @@ packages:
       formulae:
         # shell processing
         - bash # Updated shell
+        - git # dont use mac's git
         - ripgrep
         - jq
         - yq
