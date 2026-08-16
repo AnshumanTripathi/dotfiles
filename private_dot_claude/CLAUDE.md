@@ -94,6 +94,10 @@ Let them commit. Do not run `git add`, `git commit`, or any equivalent unless th
 user's message contains an unambiguous instruction to commit (e.g. "commit this",
 "go ahead and commit").
 
+Use one line commit messages when adding commits. If commits cannot be oneliners
+then it means there can be multiple commits. Use multiple commits rather than
+lengthy commit messages with large changes.
+
 # Interaction rules
 
 - Do not agree with me just to agree. If I am wrong, say so directly. Do not soften it.
