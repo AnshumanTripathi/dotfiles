@@ -7,6 +7,9 @@ return {
     { "<Tab>",       "<cmd>BufferLineCycleNext<cr>", desc = "Next buffer" },
     { "<S-Tab>",     "<cmd>BufferLineCyclePrev<cr>", desc = "Prev buffer" },
     { "<leader>bd",  "<cmd>bdelete<cr>",             desc = "Close buffer" },
+    { "<leader>bp",  "<cmd>BufferLinePick<cr>",      desc = "Pick buffer to switch to" },
+    { "<leader>bx",  "<cmd>BufferLinePickClose<cr>", desc = "Pick buffer to close" },
+    { "<leader>bo",  "<cmd>BufferLineCloseOthers<cr>", desc = "Close other buffers" },
   },
   opts = {
     options = {
