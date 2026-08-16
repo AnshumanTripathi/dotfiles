@@ -11,7 +11,7 @@ return {
       local lspconfig = require("lspconfig")
 
       require("mason-lspconfig").setup({
-        ensure_installed = { "lua_ls", "ts_ls", "gopls" },
+        ensure_installed = { "lua_ls", "ts_ls", "gopls", "terraformls" },
         automatic_installation = true,
         handlers = {
           -- Default handler — runs for every installed server
