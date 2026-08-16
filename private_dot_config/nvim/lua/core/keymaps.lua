@@ -20,6 +20,10 @@ vim.keymap.set({ "n", "t" }, "<C-j>", function()
     return
   end
 
+  if vim.bo.filetype == "neo-tree" then
+    vim.cmd("wincmd p")
+  end
+
   if not vim.api.nvim_buf_is_valid(terminal_buf) then
     vim.cmd("below sp | terminal")
     vim.cmd("resize " .. term_height())
