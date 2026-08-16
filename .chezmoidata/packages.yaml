@@ -29,6 +29,7 @@ packages:
         - tree-sitter
         - tree-sitter-cli
         - lazygit
+        - trash
       taps: []
       casks:
         - font-jetbrains-mono-nerd-font
