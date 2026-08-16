@@ -242,6 +242,34 @@ function rename_kube_context() {
   fi
 }
 
+rm() {
+  # Only wrap in interactive shells
+  [[ -o interactive ]] || { command rm "$@"; return $?; }
+
+{{- if eq .chezmoi.os "darwin" }}
+  # If trash isn't installed, just run rm normally
+  command -v trash >/dev/null 2>&1 || { command rm "$@"; return $?; }
+{{- else }}
+  # If gio isn't installed, just run rm normally
+  command -v gio >/dev/null 2>&1 || { command rm "$@"; return $?; }
+{{- end }}
+
+  # trash/gio trash don't take rm's -r/-f flags (they trash dirs and don't need forcing) - strip them
+  local args=()
+  for a in "$@"; do
+    case "$a" in
+      -r|-f|-rf|-fr|--recursive|--force) continue ;;
+      *) args+=("$a") ;;
+    esac
+  done
+
+{{- if eq .chezmoi.os "darwin" }}
+  command trash "${args[@]}"
+{{- else }}
+  command gio trash "${args[@]}"
+{{- end }}
+}
+
 kubectl() {
   # Only wrap in interactive shells
   [[ -o interactive ]] || { command kubectl "$@"; return $?; }

@@ -27,8 +27,7 @@ vim.api.nvim_create_autocmd("VimEnter", {
     local argc = vim.fn.argc()
     local is_dir = argc == 1 and vim.fn.isdirectory(vim.fn.argv(0)) == 1
     if argc == 0 or is_dir then
-      vim.cmd("Neotree filesystem show left")
-      vim.cmd("wincmd l")
+      vim.cmd("Neotree filesystem focus left")
     end
   end,
 })
