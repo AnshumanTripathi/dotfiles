@@ -191,9 +191,12 @@ export PYENV_ROOT="$HOME/.pyenv"
 [[ -d $PYENV_ROOT/bin ]] && export PATH="$PYENV_ROOT/bin:$PATH"
 eval "$(pyenv init - zsh)"
 # Lazy load pyenv-virtualenv - only init when you actually use it
+# Lazy load pyenv-virtualenv - only init when you actually use it
 pyenv() {
+  unfunction pyenv
+  eval "$(command pyenv init - zsh)"
   eval "$(command pyenv virtualenv-init -)"
-  command pyenv "$@"
+  pyenv "$@"
 }
 
 # >>>
