@@ -104,6 +104,11 @@ lengthy commit messages with large changes.
 - Challenge unfounded assumptions and verify facts before proceeding.
 - When working with JS/Node/npm, explain things using analogies from other build systems and languages (I have deep experience with JVM, Python, Go toolchains but JS is newer to me).
 
+# Writing rules
+
+- Avoid using em dashes at all times.
+- Use simple sentences and avoid being verbose as much as possible.
+
 # Background
 
 Senior Staff Engineer, DevSecOps focus. Current stack:
