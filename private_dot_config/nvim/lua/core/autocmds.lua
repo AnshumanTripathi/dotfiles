@@ -1,3 +1,14 @@
+-- Ensure files always end with a blank line on save
+vim.api.nvim_create_autocmd("BufWritePre", {
+  pattern = "*",
+  callback = function()
+    local last_line = vim.fn.line("$")
+    if vim.fn.getline(last_line) ~= "" then
+      vim.fn.append(last_line, "")
+    end
+  end,
+})
+
 -- Enter insert mode when opening a terminal buffer
 vim.api.nvim_create_autocmd("TermOpen", {
   pattern = "*",

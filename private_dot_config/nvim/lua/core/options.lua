@@ -1,4 +1,5 @@
 vim.g.mapleader = " "          -- Space as leader key
+vim.g.active_theme = "onedark" -- "onedark" | "catppuccin"
 
 vim.opt.number = true           -- Show line numbers
 vim.opt.relativenumber = true  -- Relative line numbers (easier for jumping)
