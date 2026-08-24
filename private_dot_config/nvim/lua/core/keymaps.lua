@@ -39,6 +39,10 @@ vim.keymap.set({ "n", "t" }, "<C-j>", function()
   vim.cmd("startinsert")
 end, { desc = "Toggle terminal" })
 
+-- Duplicate line (VS Code style: Shift+Alt+Down/Up)
+vim.keymap.set("n", "<S-M-Down>", "yyp",  { desc = "Duplicate line down" })
+vim.keymap.set("n", "<S-M-Up>",   "yyP",  { desc = "Duplicate line up" })
+
 -- File tree
 vim.keymap.set("n", "<leader>e", "<cmd>Neotree toggle<cr>", { desc = "Toggle file tree" })
 vim.keymap.set("n", "<leader>r", "<cmd>Neotree focus<cr>",  { desc = "Focus file tree" })
