@@ -115,6 +115,11 @@ To manage plugins inside Neovim: run `:Lazy` to open the plugin manager UI.
 | `Space d` | Show diagnostics (errors/warnings) for current line |
 | `[d` / `]d` | Jump to previous / next diagnostic |
 
+### Editing
+| Key | Action |
+|---|---|
+| `Space /` | Toggle comment on line / selection (normal + visual) |
+
 ### Git
 | Key | Action |
 |---|---|

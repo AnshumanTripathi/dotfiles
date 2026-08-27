@@ -43,6 +43,10 @@ end, { desc = "Toggle terminal" })
 vim.keymap.set("n", "<S-M-Down>", "yyp",  { desc = "Duplicate line down" })
 vim.keymap.set("n", "<S-M-Up>",   "yyP",  { desc = "Duplicate line up" })
 
+-- Comment toggle (like Cmd+/ in VS Code)
+vim.keymap.set("n", "<leader>/", "gcc", { desc = "Toggle comment", remap = true })
+vim.keymap.set("v", "<leader>/", "gc",  { desc = "Toggle comment", remap = true })
+
 -- File tree
 vim.keymap.set("n", "<leader>e", "<cmd>Neotree toggle<cr>", { desc = "Toggle file tree" })
 vim.keymap.set("n", "<leader>r", "<cmd>Neotree focus<cr>",  { desc = "Focus file tree" })
