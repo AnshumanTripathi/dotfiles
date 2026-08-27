@@ -1,3 +1,13 @@
+-- Set CWD to git root when opening a file (so git-aware plugins work from subdirectories)
+vim.api.nvim_create_autocmd("BufReadPost", {
+  callback = function()
+    local git_root = vim.fn.systemlist("git -C " .. vim.fn.shellescape(vim.fn.expand("%:p:h")) .. " rev-parse --show-toplevel")[1]
+    if git_root and vim.fn.isdirectory(git_root) == 1 then
+      vim.cmd("lcd " .. vim.fn.fnameescape(git_root))
+    end
+  end,
+})
+
 -- Ensure files always end with a blank line on save
 vim.api.nvim_create_autocmd("BufWritePre", {
   pattern = "*",
