@@ -6,7 +6,16 @@ return {
   keys = {
     { "<Tab>",       "<cmd>BufferLineCycleNext<cr>", desc = "Next buffer" },
     { "<S-Tab>",     "<cmd>BufferLineCyclePrev<cr>", desc = "Prev buffer" },
-    { "<leader>bd",  "<cmd>bdelete<cr>",             desc = "Close buffer" },
+    { "<leader>bd", function()
+      local cur = vim.api.nvim_get_current_buf()
+      local bufs = vim.fn.getbufinfo({ buflisted = 1 })
+      if #bufs <= 1 then
+        vim.cmd("enew")       -- last buffer: open blank so focus stays in main window
+      else
+        vim.cmd("bprevious")  -- skips unlisted buffers (neo-tree, terminals, etc.)
+      end
+      vim.api.nvim_buf_delete(cur, { force = false })
+    end, desc = "Close buffer" },
     { "<leader>bp",  "<cmd>BufferLinePick<cr>",      desc = "Pick buffer to switch to" },
     { "<leader>bx",  "<cmd>BufferLinePickClose<cr>", desc = "Pick buffer to close" },
     { "<leader>bo",  "<cmd>BufferLineCloseOthers<cr>", desc = "Close other buffers" },
