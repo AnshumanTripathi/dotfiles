@@ -27,39 +27,80 @@ chezmoi edit ~/.config/nvim/init.lua   # Edit source and apply in one step
 
 ## Config structure
 
+This is Omarchy's own LazyVim-based nvim config (seeded by the `omarchy-nvim` pacman
+package) used as the base, with the user's plugins/keymaps/options layered on top the way
+LazyVim expects extensions to be layered — **not** a from-scratch config. `lua/config/*`
+are LazyVim's designated override points; `lua/plugins/*.lua` are plain lazy.nvim specs,
+merged with LazyVim's own plugins of the same name/url.
+
 ```
 private_dot_config/nvim/
-├── init.lua                  # Entry point: bootstraps lazy.nvim, loads core + plugins
-├── lazy-lock.json            # Plugin version lockfile (auto-managed by lazy.nvim)
+├── init.lua                  # Entry point: require("config.lazy")
+├── lazyvim.json               # LazyVim's extras-enabled tracking file (auto-updated by :LazyExtras)
+├── lazy-lock.json             # Plugin version lockfile (auto-managed by lazy.nvim)
 ├── lua/
-│   ├── core/
-│   │   ├── options.lua       # Basic editor settings (line numbers, indentation, etc.)
-│   │   ├── keymaps.lua       # Global keybindings + terminal toggle logic
-│   │   └── autocmds.lua      # Automatic behaviors (autosave, neo-tree on startup, etc.)
-│   └── plugins/              # One file per plugin; lazy.nvim loads all of them
-│       ├── coloscheme.lua    # Catppuccin Mocha theme
-│       ├── lualine.lua       # Status bar at the bottom
-│       ├── bufferline.lua    # Tab-like buffer tabs at the top
-│       ├── neo-tree.lua      # File explorer sidebar
-│       ├── telescope.lua     # Fuzzy finder (files, grep, buffers)
-│       ├── treesitter.lua    # Syntax highlighting
-│       ├── lsp.lua           # Language intelligence (go-to-def, hover docs, errors)
-│       ├── completion.lua    # Autocomplete popup (nvim-cmp + LuaSnip)
-│       ├── gitsigns.lua      # Git change indicators in the gutter
-│       ├── gitlinker.lua     # Open current line in GitLab/GitHub in browser
-│       ├── lazygit.lua       # LazyGit TUI inside Neovim
-│       └── terminal.lua      # (if present) terminal configuration
+│   ├── config/
+│   │   ├── lazy.lua           # Bootstraps lazy.nvim + LazyVim, imports lua/plugins/
+│   │   ├── options.lua        # User option overrides (LazyVim already defaults most editor settings)
+│   │   ├── keymaps.lua        # User keybindings, loaded after LazyVim's own defaults (so these win)
+│   │   ├── autocmds.lua       # User autocmds (autosave, neo-tree on startup, etc.)
+│   │   └── remote_clipboard.lua # Omarchy: OSC52 clipboard over SSH/tmux
+│   └── plugins/                # One file per plugin spec; lazy.nvim loads all of them
+│       ├── coloscheme.lua      # Static onedark/catppuccin theme -- NON-OMARCHY MACHINES ONLY,
+│       │                       # see "Theming" below. Excluded via .chezmoiignore on Omarchy.
+│       ├── theme.lua           # Omarchy-owned, NOT chezmoi-tracked -- see "Theming" below
+│       ├── all-themes.lua      # Omarchy: preloads all theme plugins for hot-reload
+│       ├── omarchy-theme-hotreload.lua # Omarchy: reapplies colorscheme on OS theme change
+│       ├── disable-news-alert.lua      # Omarchy: silences the LazyVim/Neovim news popup
+│       ├── snacks-animated-scrolling-off.lua # Omarchy: disables snacks.nvim scroll animation
+│       ├── lualine.lua        # Status bar at the bottom
+│       ├── bufferline.lua     # Tab-like buffer tabs at the top
+│       ├── neo-tree.lua       # File explorer sidebar
+│       ├── telescope.lua      # Fuzzy finder (files, grep, buffers)
+│       ├── treesitter.lua     # Syntax highlighting
+│       ├── lsp.lua            # Language intelligence (go-to-def, hover docs, errors)
+│       ├── completion.lua     # Autocomplete popup (nvim-cmp + LuaSnip)
+│       ├── gitsigns.lua       # Git change indicators in the gutter
+│       ├── gitlinker.lua.tmpl # Open current line in GitLab/GitHub in browser (work profile adds internal GitLab host)
+│       ├── git-conflict.lua   # Merge conflict highlighting/navigation
+│       ├── lazygit.lua        # LazyGit TUI inside Neovim
+│       ├── visual-multi.lua   # Multi-cursor editing
+│       └── terminal.lua       # toggleterm.nvim
+└── plugin/after/transparency.lua # Omarchy: transparent highlight groups, re-sourced on theme reload
 ```
 
 ---
 
-## Plugin manager: lazy.nvim
+## Plugin manager: lazy.nvim + LazyVim
 
-`lazy.nvim` is bootstrapped automatically in `init.lua` — it clones itself from GitHub on first run if missing. It then loads every file under `lua/plugins/` as a plugin spec.
+`lazy.nvim` is bootstrapped in `lua/config/lazy.lua`, which also imports LazyVim itself
+(`lazyvim.plugins`) before importing this repo's own `lua/plugins/`. That import order
+matters — LazyVim's own sanity check warns if LazyVim's imports don't come before user
+plugins. Every file under `lua/plugins/` is loaded automatically as an additional plugin
+spec; a spec with the same plugin name/url as one of LazyVim's own merges into it (options
+and keys combine) rather than installing twice.
 
 Each plugin file returns a Lua table describing: which plugin to install (GitHub slug), when to load it (`lazy = false` = always, `event = ...` = on demand), its options, and its keymaps.
 
-To manage plugins inside Neovim: run `:Lazy` to open the plugin manager UI.
+To manage plugins inside Neovim: run `:Lazy` to open the plugin manager UI. Run `:LazyExtras` to browse/enable LazyVim's bundled language/tool extras (tracked in `lazyvim.json`).
+
+---
+
+## Theming
+
+Two theming mechanisms exist, gated so only one is ever active on a given machine:
+
+- **On Omarchy** (detected via `.chezmoi.osRelease.id == "omarchy"` in `.chezmoiignore`):
+  Omarchy's own `omarchy-theme-set` script rewrites `lua/plugins/theme.lua` live, every
+  time the OS theme is changed, setting LazyVim's `opts.colorscheme` to match. This file is
+  **intentionally not chezmoi-tracked** — tracking it would fight the live rewrite on every
+  `chezmoi apply`. `all-themes.lua` and `omarchy-theme-hotreload.lua` support this
+  mechanism (preloading theme plugins, reapplying the colorscheme + transparency on
+  change). `coloscheme.lua` is excluded from deployment here via `.chezmoiignore` so it
+  can't compete with `theme.lua` for the same LazyVim option.
+- **Everywhere else** (macOS, plain Arch, etc.): `coloscheme.lua` is the only colorscheme
+  source, toggled via `vim.g.active_theme` in `lua/config/options.lua` (`"onedark"` or
+  `"catppuccin"`).
 
 ---
 
