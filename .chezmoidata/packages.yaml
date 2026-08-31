@@ -30,6 +30,7 @@ packages:
         - tree-sitter-cli
         - lazygit
         - trash
+        - namp
       taps: []
       casks:
         - font-jetbrains-mono-nerd-font
@@ -119,6 +120,7 @@ packages:
         - tree-sitter
         - lazygit
         # utilities
+        - tailscale
         - xclip
       aur:
         - asdf-vm
@@ -171,12 +173,22 @@ packages:
           - noto-fonts
           - noto-fonts-emoji
           - syncthing
-          - tailscale
         aur: []
       work:
         packages: []
         aur:
           - glab
+    # systemd services to enable+start once their package is installed
+    # scope: "system" -> sudo systemctl enable --now <unit>
+    #        "user"   -> systemctl --user enable --now <unit>
+    services:
+      shared:
+        - name: tailscale
+          unit: tailscaled.service
+          scope: system
+      profiles:
+        personal: []
+        work: []
 
   # Future: just add a new key
   # apt:
@@ -240,3 +252,4 @@ packages:
           darwin: []
           linux: []
         npm: []
+

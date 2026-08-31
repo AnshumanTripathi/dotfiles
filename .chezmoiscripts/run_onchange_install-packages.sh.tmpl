@@ -6,6 +6,12 @@
 {{ $profile := .profile -}}
 
 {{ if eq $os "linux" -}}
+# ── Detect Omarchy (its base install pulls in packages that conflict with ours) ──
+IS_OMARCHY=false
+if pacman -Qi omarchy &> /dev/null; then
+    IS_OMARCHY=true
+fi
+
 # ── Bootstrap yay AUR helper (Arch Linux) ──
 if ! command -v yay &> /dev/null; then
     echo "#############################################"
@@ -91,9 +97,32 @@ sudo pacman -S --needed --noconfirm \
 echo ""
 echo "Installing shared AUR packages"
 echo ""
-yay -S --needed --noconfirm \
-{{ range .packages.pacman.shared.aur }}  {{ . }} \
-{{ end }}
+AUR_SHARED_PACKAGES=(
+{{ range .packages.pacman.shared.aur }}  {{ . | quote }}
+{{ end }})
+if $IS_OMARCHY; then
+  # omarchy hard-depends on ttf-jetbrains-mono-nerd-basic, which conflicts
+  # with (and already provides) the full ttf-jetbrains-mono-nerd package
+  AUR_SHARED_PACKAGES=($(printf '%s\n' "${AUR_SHARED_PACKAGES[@]}" | grep -v '^ttf-jetbrains-mono-nerd$'))
+fi
+yay -S --needed --noconfirm "${AUR_SHARED_PACKAGES[@]}"
+
+echo ""
+echo "Enabling shared systemd services"
+echo ""
+
+{{ range .packages.pacman.services.shared -}}
+if command -v {{ .name }} &>/dev/null; then
+  echo "Enabling {{ .unit }} ({{ .scope }})"
+  {{ if eq .scope "system" -}}
+  sudo systemctl enable --now {{ .unit }}
+  {{ else -}}
+  systemctl --user enable --now {{ .unit }}
+  {{ end -}}
+else
+  echo "{{ .name }} not found, skipping {{ .unit }}"
+fi
+{{ end -}}
 {{ end -}}
 
 {{ if .installContainerTools -}}
@@ -316,6 +345,10 @@ cask {{ . | quote }}
 {{ end -}}
 EOF
 {{ else if eq $os "linux" -}}
+if $IS_OMARCHY && pacman -Qi libreoffice-fresh &> /dev/null; then
+  echo "Omarchy installs libreoffice-fresh by default; removing it in favor of libreoffice-still"
+  sudo pacman -R --noconfirm libreoffice-fresh
+fi
 sudo pacman -S --needed --noconfirm \
 {{ range (index .packages.pacman.profiles $profile).packages }}  {{ . }} \
 {{ end }}
@@ -324,6 +357,23 @@ sudo pacman -S --needed --noconfirm \
 yay -S --needed --noconfirm \
 {{ range (index .packages.pacman.profiles $profile).aur }}  {{ . }} \
 {{ end }}
+{{ end -}}
+
+echo ""
+echo "Enabling ({{ .profile }}) profile specific systemd services"
+echo ""
+
+{{ range (index .packages.pacman.services.profiles $profile) -}}
+if command -v {{ .name }} &>/dev/null; then
+  echo "Enabling {{ .unit }} ({{ .scope }})"
+  {{ if eq .scope "system" -}}
+  sudo systemctl enable --now {{ .unit }}
+  {{ else -}}
+  systemctl --user enable --now {{ .unit }}
+  {{ end -}}
+else
+  echo "{{ .name }} not found, skipping {{ .unit }}"
+fi
 {{ end -}}
 {{ end -}}
 
