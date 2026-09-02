@@ -10,10 +10,13 @@ scrollback-limit = 4294967295
 {{- if eq .chezmoi.os "darwin" }}
 keybind = cmd+right=text:\x05
 keybind = cmd+left=text:\x01
+initial-command = /bin/zsh -c "/opt/homebrew/bin/fastfetch; exec /bin/zsh" 
 {{- else }}
 keybind = super+right=text:\x05
 keybind = super+left=text:\x01
 {{- end }}
 keybind = alt+delete=text:\x0b
+keybind = super+v=paste_from_clipboard
 window-inherit-font-size = true
 {{- end }}
+
